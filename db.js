@@ -6,7 +6,7 @@ const { db_name, db_password, db_user, db_host } = process.env;
 
 const sequelize = new Sequelize(db_name, db_user, db_password, {
   host: db_host,
-  dialect: "mariadb",
+  dialect: "mysql2",
   port: 3306,
 });
 

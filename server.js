@@ -6,8 +6,8 @@ process.on("uncaughtException", (error) => {
 });
 
 dotenv.config({ path: "./config.env" });
-// const { host, port, db_name, db_user, db_password } = process.env;
-// console.log(db_user, db_name, db_password, host);
+const { host, port, db_name, db_user, db_password } = process.env;
+console.log(db_user, db_name, db_password, host);
 
 // connecting to the database
 const sequelize = require("./db");
