@@ -4,48 +4,75 @@ const sequelize = require("../db");
 const User = require("./user");
 const Link = require("./links");
 
-const Movie = sequelize.define("Movie", {
-  id: {
-    type: DataTypes.STRING(50),
-    allowNull: false,
-    primaryKey: true,
-    unique: true,
+const Movie = sequelize.define(
+  "Movie",
+  {
+    id: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      primaryKey: true,
+      unique: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    image: DataTypes.STRING,
+    description: DataTypes.STRING(1000),
+    tags: DataTypes.JSON,
+    company: DataTypes.STRING,
+    companies: DataTypes.JSON,
+    characters: DataTypes.JSON,
+    actors: DataTypes.JSON,
+    releasedDate: DataTypes.DATEONLY,
+    country: DataTypes.STRING,
+    rating: DataTypes.DECIMAL,
   },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  image: DataTypes.STRING,
-  description: DataTypes.STRING(1000),
-  tags: DataTypes.JSON,
-  company: DataTypes.STRING,
-  companies: DataTypes.JSON,
-  characters: DataTypes.JSON,
-  releasedDate: DataTypes.DATEONLY,
-  country: DataTypes.STRING,
-  rating: DataTypes.DECIMAL,
-});
+  {
+    defaultScope: { attributes: { exclude: "UserId" } },
+  }
+);
 
-User.hasMany(Movie, {
-  foreignKey: "user",
-  onDelete: "NO ACTION",
-  onUpdate: "NO ACTION",
-});
+User.hasMany(Movie);
 Movie.belongsTo(User, {
+  targetKey: "id",
   foreignKey: "user",
   onDelete: "NO ACTION",
   onUpdate: "NO ACTION",
 });
 
 Movie.hasMany(Link, {
+  sourceKey: "id",
   foreignKey: "movie",
   onDelete: "CASCADE",
   onUpdate: "NO ACTION",
 });
 Link.belongsTo(Movie, {
+  targetKey: "id",
   foreignKey: "movie",
   onDelete: "CASCADE",
   onUpdate: "NO ACTION",
+});
+
+//
+
+// ================= HOOKS ==============
+
+Movie.afterFind((movie) => {
+  // console.log("🔥", typeof movie.length);
+  if (typeof movie.length == "number") {
+    movie.forEach((m) => {
+      m.tags = JSON.parse(m.tags);
+      m.companies = JSON.parse(m.companies);
+      m.characters = JSON.parse(m.characters);
+      m.actors = JSON.parse(m.actors);
+    });
+    return;
+  }
+  movie.tags = JSON.parse(movie.tags);
+  movie.companies = JSON.parse(movie.companies);
+  movie.characters = JSON.parse(movie.characters);
+  movie.actors = JSON.parse(movie.actors);
 });
 
 module.exports = Movie;

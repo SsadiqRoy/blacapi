@@ -1,5 +1,6 @@
-const { createInstance } = require("../middlewares/globalMiddleware");
 const Movie = require("../model/movies");
+
+const { createInstance } = require("../middlewares/globalMiddleware");
 const { catchAsync } = require("../utils/utils");
 
 //
@@ -41,7 +42,7 @@ exports.deleteMovie = catchAsync(async (req, res, next) => {
 //
 
 exports.getAll = catchAsync(async (req, res, next) => {
-  const data = await Movie.findAll();
+  const data = await Movie.findAll({ individualHooks: true });
 
   res.status(200).json({
     status: "success",
@@ -53,7 +54,9 @@ exports.getAll = catchAsync(async (req, res, next) => {
 //
 
 exports.getOne = catchAsync(async (req, res, next) => {
-  const data = await Movie.findByPk(req.params.id);
+  const data = await Movie.findByPk(req.params.id, {
+    include: ["User", "Links"],
+  });
 
   res.status(200).json({
     status: "success",
