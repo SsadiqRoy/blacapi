@@ -3,6 +3,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
 const User = require("./user");
 const Link = require("./links");
+const Screenshot = require("./screenshots");
 
 const Movie = sequelize.define(
   "Movie",
@@ -33,7 +34,13 @@ const Movie = sequelize.define(
   }
 );
 
-User.hasMany(Movie);
+// =========== association between user and movie =====
+User.hasMany(Movie, {
+  sourceKey: "id",
+  foreignKey: "user",
+  onDelete: "NO ACTION",
+  onUpdate: "NO ACTION",
+});
 Movie.belongsTo(User, {
   targetKey: "id",
   foreignKey: "user",
@@ -41,6 +48,7 @@ Movie.belongsTo(User, {
   onUpdate: "NO ACTION",
 });
 
+// =========== association between Movie and Links
 Movie.hasMany(Link, {
   sourceKey: "id",
   foreignKey: "movie",
@@ -48,6 +56,20 @@ Movie.hasMany(Link, {
   onUpdate: "NO ACTION",
 });
 Link.belongsTo(Movie, {
+  targetKey: "id",
+  foreignKey: "movie",
+  onDelete: "CASCADE",
+  onUpdate: "NO ACTION",
+});
+
+// =========== association between Movie and screenshots
+Movie.hasMany(Screenshot, {
+  sourceKey: "id",
+  foreignKey: "movie",
+  onDelete: "CASCADE",
+  onUpdate: "NO ACTION",
+});
+Screenshot.belongsTo(Movie, {
   targetKey: "id",
   foreignKey: "movie",
   onDelete: "CASCADE",

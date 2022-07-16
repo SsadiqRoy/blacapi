@@ -18,11 +18,13 @@ exports.createLink = catchAsync(async (req, res, next) => {
 //
 
 exports.updateLink = catchAsync(async (req, res, next) => {
-  const link = await Link.update({ where: { id: req.params.id } });
+  const link = await Link.update(req.body, { where: { id: req.params.id } });
+  const data = await Link.findByPk(req.params.id);
 
   res.status(200).json({
     status: "success",
-    data: link,
+    meta: link,
+    data,
   });
 });
 

@@ -20,10 +20,12 @@ exports.createMovie = catchAsync(async (req, res, next) => {
 
 exports.updateMovie = catchAsync(async (req, res, next) => {
   const movie = await Movie.update(req.body, { where: { id: req.params.id } });
+  const data = await Movie.findByPk(req.params.id);
 
   res.status(204).json({
     status: "success",
-    data: movie,
+    meta: movie,
+    data,
   });
 });
 
@@ -55,7 +57,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
 
 exports.getOne = catchAsync(async (req, res, next) => {
   const data = await Movie.findByPk(req.params.id, {
-    include: ["User", "Links"],
+    include: ["User", "Links", "Screenshots"],
   });
 
   res.status(200).json({
