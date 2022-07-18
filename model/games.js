@@ -21,7 +21,7 @@ const Game = sequelize.define("Game", {
   tags: DataTypes.JSON,
   company: DataTypes.STRING,
   companies: DataTypes.JSON,
-  year: DataTypes.DATEONLY,
+  releasedDate: DataTypes.DATEONLY,
 });
 
 // ============= ASSOCIATIONS ==========

@@ -27,7 +27,7 @@ const Movie = sequelize.define(
     actors: DataTypes.JSON,
     releasedDate: DataTypes.DATEONLY,
     country: DataTypes.STRING,
-    rating: DataTypes.DECIMAL,
+    rating: DataTypes.STRING(4),
   },
   {
     defaultScope: { attributes: { exclude: "UserId" } },

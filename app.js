@@ -8,6 +8,7 @@ app.use(express.json());
 
 const userRoute = require("./routes/userRoutes");
 const movieRoute = require("./routes/movieRoutes");
+const serieRoute = require("./routes/serieRoutes");
 const gameRoute = require("./routes/gameRoutes");
 // =======================================================
 const linkRoute = require("./routes/linkRoutes");
@@ -17,16 +18,13 @@ const screenRoute = require("./routes/screenshotRoutes");
 
 app.use("/blaciris/api/v1/users", userRoute);
 app.use("/blaciris/api/v1/movies", movieRoute);
+app.use("/blaciris/api/v1/series", serieRoute);
 app.use("/blaciris/api/v1/games", gameRoute);
 // =================================================
 app.use("/blaciris/api/v1/links", linkRoute);
 app.use("/blaciris/api/v1/screenshots", screenRoute);
 
-// 421d2d0e316249b783d183dc68519255
-// 8e00af4e919c40f1b9a95c2e94190395
-// 7441db81a41342f9a7db488b225a5411
-
-// 62c92f6ba49ff7ac61e7fe6d
+//
 
 //
 
