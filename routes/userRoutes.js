@@ -6,9 +6,9 @@ const router = Router();
 
 //
 
-router.route("/").post(controller.createUser).get(controller.getAll);
-const { getOne, updateUser, deleteUser } = controller;
-router.route("/:id").get(getOne).patch(updateUser).delete(deleteUser);
+router.route("/").post(controller.createUser).get(controller.allUsers);
+const { oneUser, updateUser, deleteUser } = controller;
+router.route("/:id").get(oneUser).patch(updateUser).delete(deleteUser);
 
 //
 module.exports = router;
