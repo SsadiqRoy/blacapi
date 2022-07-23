@@ -4,6 +4,10 @@ const sequelize = require("../db");
 const Movie = require("./movies");
 const Game = require("./games");
 const Serie = require("./series");
+// const Notification = require("./notifications");
+
+// const { createInstance } = require("../middlewares/globalMiddleware");
+// const { createId } = require("../utils/utils");
 
 const Problem = sequelize.define("Problem", {
   id: {
@@ -73,15 +77,6 @@ Problem.belongsTo(Serie, {
 //
 
 //
-
-Problem.afterCreate((problem) => {
-  const body = {
-    on: "problem",
-    message: `There is a new problem on a/an ${problem.on}`,
-    problem: problem.id,
-  };
-  createInstance(Model, body);
-});
 
 /*
 options

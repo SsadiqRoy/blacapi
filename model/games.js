@@ -40,7 +40,7 @@ Game.belongsTo(User, {
   onUpdate: "NO ACTION",
 });
 
-// ============= Games associating with links
+// // ============= Games associating with links
 Game.hasMany(Link, {
   sourceKey: "id",
   foreignKey: "game",
@@ -55,7 +55,7 @@ Link.belongsTo(Game, {
   onUpdate: "NO ACTION",
 });
 
-// ============= Games associating with screenshots
+// // ============= Games associating with screenshots
 Game.hasMany(Screenshot, {
   sourceKey: "id",
   foreignKey: "game",

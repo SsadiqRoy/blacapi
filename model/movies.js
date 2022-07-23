@@ -30,7 +30,7 @@ const Movie = sequelize.define(
     rating: DataTypes.STRING(4),
   },
   {
-    defaultScope: { attributes: { exclude: "UserId" } },
+    // defaultScope: { attributes: { exclude: "UserId" } },
   }
 );
 

@@ -1,8 +1,8 @@
-const { DataTypes, Model } = require("sequelize");
+const { DataTypes } = require("sequelize");
 
 const sequelize = require("../db");
-const Notification = require("./notifications");
-const createInstance = require("../middlewares/globalMiddleware");
+// const Notification = require("./notifications");
+// const { createInstance } = require("../middlewares/globalMiddleware");
 
 const Suggestion = sequelize.define("Suggestion", {
   id: {
@@ -23,15 +23,6 @@ const Suggestion = sequelize.define("Suggestion", {
 //
 
 //
-
-Suggestion.afterCreate((suggestion) => {
-  const body = {
-    on: "suggestion",
-    message: `There is a new suggestion on ${suggestion.on}`,
-    suggestion: suggestion.id,
-  };
-  createInstance(Model, body);
-});
 
 /*
 options
