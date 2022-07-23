@@ -17,6 +17,10 @@ const Notification = sequelize.define("Notification", {
     type: DataTypes.ENUM,
     values: ["schedule", "suggestion", "problem", "message", "other"],
   },
+  viewed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
   message: DataTypes.STRING,
 });
 

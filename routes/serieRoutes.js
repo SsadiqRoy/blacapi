@@ -9,6 +9,6 @@ const router = Router();
 router.route("/").post(controller.addSerie).get(controller.allSeries);
 const { oneSerie, updateSerie, deleteSerie } = controller;
 router.route("/:id").get(oneSerie).patch(updateSerie).delete(deleteSerie);
-
+router.get("/search/:text", controller.search);
 //
 module.exports = router;

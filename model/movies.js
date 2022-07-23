@@ -23,7 +23,7 @@ const Movie = sequelize.define(
     tags: DataTypes.JSON,
     company: DataTypes.STRING,
     companies: DataTypes.JSON,
-    characters: DataTypes.JSON,
+    charactors: DataTypes.JSON,
     actors: DataTypes.JSON,
     releasedDate: DataTypes.DATEONLY,
     country: DataTypes.STRING,
@@ -82,18 +82,19 @@ Screenshot.belongsTo(Movie, {
 
 Movie.afterFind((movie) => {
   // console.log("🔥", typeof movie.length);
+  if (!movie.length) return;
   if (typeof movie.length == "number") {
     movie.forEach((m) => {
       m.tags = JSON.parse(m.tags);
       m.companies = JSON.parse(m.companies);
-      m.characters = JSON.parse(m.characters);
+      m.characters = JSON.parse(m.charactors);
       m.actors = JSON.parse(m.actors);
     });
     return;
   }
   movie.tags = JSON.parse(movie.tags);
   movie.companies = JSON.parse(movie.companies);
-  movie.characters = JSON.parse(movie.characters);
+  movie.characters = JSON.parse(movie.charactors);
   movie.actors = JSON.parse(movie.actors);
 });
 

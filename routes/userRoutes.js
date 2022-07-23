@@ -10,5 +10,7 @@ router.route("/").post(controller.createUser).get(controller.allUsers);
 const { oneUser, updateUser, deleteUser } = controller;
 router.route("/:id").get(oneUser).patch(updateUser).delete(deleteUser);
 
+router.get("/search/:text", controller.search);
+
 //
 module.exports = router;

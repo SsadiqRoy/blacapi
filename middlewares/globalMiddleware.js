@@ -1,4 +1,8 @@
 const { createId, catchAsync } = require("../utils/utils");
+const ApiFilter = require("../utils/apiFilter");
+const { Op } = require("sequelize");
+const sequelize = require("../db");
+const { searchMatch } = require("../utils/functions");
 
 let nOfInstance = 0;
 exports.createInstance = async (Model, body) => {
@@ -38,11 +42,14 @@ exports.create = (Model) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    // console.log(req.query);
-    const data = await Model.findAll({ where: req.query });
+    const query = new ApiFilter(req.query).query;
+    console.log(query);
+    const data = await Model.findAll(query);
+    const total = await Model.count({ where: query.where });
 
     res.status(200).json({
       status: "success",
+      total,
       length: data.length,
       data,
     });
@@ -84,6 +91,36 @@ exports.getOne = (Model, include = undefined) =>
 
     res.status(200).json({
       status: "success",
+      data,
+    });
+  });
+
+//
+
+exports.search = (Model, fields) =>
+  catchAsync(async (req, res, next) => {
+    const text = req.params.text.split("-").join(" ").toLowerCase();
+
+    // building search option on fields
+    const queryFields = searchMatch(fields, text);
+
+    // creating queries
+    const api = new ApiFilter(req.query);
+    const query = api.query;
+    query.where = { [Op.or]: queryFields };
+
+    // making queries
+    const data = await Model.findAll(query);
+    const total = await Model.count({ where: query.where });
+
+    res.status(200).json({
+      status: "success",
+      meta: {
+        length: data.length,
+        page: api.page,
+        limit: query.limit,
+        total,
+      },
       data,
     });
   });

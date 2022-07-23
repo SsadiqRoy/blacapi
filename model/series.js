@@ -23,14 +23,15 @@ const Serie = sequelize.define(
     tags: DataTypes.JSON,
     company: DataTypes.STRING,
     companies: DataTypes.JSON,
-    characters: DataTypes.JSON,
+    charactors: DataTypes.JSON,
     actors: DataTypes.JSON,
     releasedDate: DataTypes.DATEONLY,
     country: DataTypes.STRING,
     rating: DataTypes.STRING(4),
     status: {
       type: DataTypes.ENUM,
-      values: ["ended", "continuing", "paused", "stopped"],
+      values: ["ended", "ongoing", "paused", "stopped"],
+      defaultValue: "ongoing",
     },
   },
   {
@@ -84,21 +85,22 @@ Screenshot.belongsTo(Serie, {
 
 // ================= HOOKS ==============
 
-Serie.afterFind((Serie) => {
+Serie.afterFind((serie) => {
   // console.log("🔥", typeof Serie.length);
-  if (typeof Serie.length == "number") {
-    Serie.forEach((m) => {
+  // if (!serie) return;
+  if (typeof serie.length == "number") {
+    serie.forEach((m) => {
       m.tags = JSON.parse(m.tags);
       m.companies = JSON.parse(m.companies);
-      m.characters = JSON.parse(m.characters);
+      m.characters = JSON.parse(m.charactors);
       m.actors = JSON.parse(m.actors);
     });
     return;
   }
-  Serie.tags = JSON.parse(Serie.tags);
-  Serie.companies = JSON.parse(Serie.companies);
-  Serie.characters = JSON.parse(Serie.characters);
-  Serie.actors = JSON.parse(Serie.actors);
+  serie.tags = JSON.parse(serie.tags);
+  serie.companies = JSON.parse(serie.companies);
+  serie.characters = JSON.parse(serie.characters);
+  serie.actors = JSON.parse(serie.actors);
 });
 
 module.exports = Serie;
