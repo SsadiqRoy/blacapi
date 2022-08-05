@@ -1,10 +1,12 @@
 const express = require("express");
+const cookieparser = require("cookie-parser");
 
 const { globalError } = require("./utils/errors");
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieparser());
 
 const userRoute = require("./routes/userRoutes");
 const movieRoute = require("./routes/movieRoutes");
@@ -19,6 +21,7 @@ const notificationRoute = require("./routes/notificationRoutes");
 const scheduleRoute = require("./routes/scheduleRoutes");
 const suggestionRoute = require("./routes/suggestionRoutes");
 const problemRoute = require("./routes/problemRoutes");
+const otherRoute = require("./routes/otherRoutes");
 
 //
 
@@ -35,6 +38,7 @@ app.use("/v1/notifications", notificationRoute);
 app.use("/v1/schedules", scheduleRoute);
 app.use("/v1/suggestions", suggestionRoute);
 app.use("/v1/problems", problemRoute);
+app.use("/v1/others", otherRoute);
 
 //
 

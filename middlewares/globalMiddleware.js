@@ -1,8 +1,12 @@
+const { promisify } = require("util");
+const jwt = require("jsonwebtoken");
+
 const { createId, catchAsync } = require("../utils/utils");
 const ApiFilter = require("../utils/apiFilter");
 const { Op } = require("sequelize");
 const sequelize = require("../db");
 const { searchMatch } = require("../utils/functions");
+const User = require("../model/user");
 
 let nOfInstance = 0;
 exports.createInstance = async (Model, body) => {
@@ -125,3 +129,33 @@ exports.search = (Model, fields) =>
       data,
     });
   });
+
+//
+exports.protect = catchAsync(async (req, res, next) => {
+  // console.log(req);
+  const cookie = req.cookies[process.env.login];
+  if (!cookie) return next(new Error("login to get access"));
+
+  // decoding the cookie
+  const decode = await promisify(jwt.verify)(cookie, process.env.loginToken);
+  const { exp, id, iat } = decode;
+
+  const user = await User.findByPk(id);
+  // checking for active account
+  if (!user.active) return next(new Error("your account is not active"));
+
+  // checking for cookie expery
+  if (Date.now() > exp * 1000) return next(new Error("please login again"));
+
+  // checking if password has been changed after loggin in and no new cookie
+  if (
+    user.passwordChangedAt &&
+    new Date(user.passwordChangedAt).getTime() > iat * 1000
+  ) {
+    return next(new Error("please log again"));
+  }
+
+  req.user = user;
+  if (user.role === "employee") req.admin = user;
+  next();
+});

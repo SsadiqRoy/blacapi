@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 
 const { DataTypes } = require("sequelize");
 
@@ -28,23 +28,25 @@ const User = sequelize.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      set(value) {
-        const hash = crypto.createHash("sha256").update(value).digest("hex");
-        this.setDataValue("password", hash);
-      },
     },
     photo: {
       type: DataTypes.STRING(70),
       defaultValue: "default.jpg",
     },
     role: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.ENUM,
+      values: ["user", "employee", "admin", "superadmin", "ssadiq"],
       defaultValue: "user",
     },
     position: {
       type: DataTypes.STRING(20),
       defaultValue: "user",
     },
+    active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    passwordChangedAt: DataTypes.DATE,
   },
   {
     defaultScope: { attributes: { exclude: ["password"] } },
@@ -53,6 +55,12 @@ const User = sequelize.define(
 
 User.afterCreate((user) => {
   user.dataValues.password = "";
+});
+User.beforeValidate(async (user) => {
+  if (user.password) {
+    user.password = await bcrypt.hash(user.password, 12);
+    console.log(user.password);
+  }
 });
 
 module.exports = User;

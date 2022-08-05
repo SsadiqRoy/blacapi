@@ -1,14 +1,20 @@
 const { Router } = require("express");
 
 const controller = require("../controllers/seriesController");
+const { protect } = require("../middlewares/globalMiddleware");
+const { aboveUser } = require("../middlewares/protectMiddleware");
 
 const router = Router();
 
 //
 
-router.route("/").post(controller.addSerie).get(controller.allSeries);
-const { oneSerie, updateSerie, deleteSerie } = controller;
-router.route("/:id").get(oneSerie).patch(updateSerie).delete(deleteSerie);
+router.get("/", controller.allSeries);
 router.get("/search/:text", controller.search);
+router.get("/:id", controller.oneSerie);
+
+router.use(protect, aboveUser);
+const { updateSerie, deleteSerie } = controller;
+router.route("/create").post(controller.addSerie);
+router.route("/:id").patch(updateSerie).delete(deleteSerie);
 //
 module.exports = router;

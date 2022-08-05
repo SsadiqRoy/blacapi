@@ -25,6 +25,7 @@ const Serie = sequelize.define(
     companies: DataTypes.JSON,
     charactors: DataTypes.JSON,
     actors: DataTypes.JSON,
+    directors: DataTypes.JSON,
     releasedDate: DataTypes.DATEONLY,
     country: DataTypes.STRING,
     rating: DataTypes.STRING(4),
