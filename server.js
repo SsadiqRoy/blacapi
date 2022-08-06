@@ -27,9 +27,7 @@ connectDB();
 const app = require("./app");
 
 // creating server for the app
-const server = app.listen(process.env.port, process.env.host, () =>
-  console.log("we are listenning...")
-);
+const server = app.listen(process.env.port, process.env.host, () => console.log("we are listenning..."));
 
 process.on("unhandledRejection", (error) => {
   console.log(error);

@@ -1,8 +1,7 @@
 const { Router } = require("express");
 
 const controller = require("../controllers/userController");
-const { protect } = require("../middlewares/globalMiddleware");
-const { aboveEployee, aboveUser } = require("../middlewares/protectMiddleware");
+const { aboveEployee, protect } = require("../middlewares/protectMiddleware");
 
 const router = Router();
 

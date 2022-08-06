@@ -18,6 +18,7 @@ const Game = sequelize.define("Game", {
   },
   image: DataTypes.STRING,
   description: DataTypes.STRING,
+  about: DataTypes.STRING(1234),
   tags: DataTypes.JSON,
   company: DataTypes.STRING,
   companies: DataTypes.JSON,
@@ -30,13 +31,13 @@ const Game = sequelize.define("Game", {
 User.hasMany(Game, {
   sourceKey: "id",
   foreignKey: "user",
-  onDelete: "CASCADE",
+  onDelete: "SET NULL",
   onUpdate: "NO ACTION",
 });
 Game.belongsTo(User, {
   targetKey: "id",
   foreignKey: "user",
-  onDelete: "CASCADE",
+  onDelete: "SET NULL",
   onUpdate: "NO ACTION",
 });
 

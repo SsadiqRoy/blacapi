@@ -1,11 +1,4 @@
-const {
-  create,
-  deleteOne,
-  update,
-  getAll,
-  getOne,
-  search,
-} = require("../middlewares/globalMiddleware");
+const { create, deleteOne, update, getAll, getOne, search } = require("../middlewares/globalMiddleware");
 const Serie = require("../model/Series");
 const Season = require("../model/seasons");
 const Episode = require("../model/episodes");

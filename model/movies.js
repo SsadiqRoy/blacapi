@@ -39,13 +39,13 @@ const Movie = sequelize.define(
 User.hasMany(Movie, {
   sourceKey: "id",
   foreignKey: "user",
-  onDelete: "NO ACTION",
+  onDelete: "SET NULL",
   onUpdate: "NO ACTION",
 });
 Movie.belongsTo(User, {
   targetKey: "id",
   foreignKey: "user",
-  onDelete: "NO ACTION",
+  onDelete: "SET NULL",
   onUpdate: "NO ACTION",
 });
 
@@ -82,21 +82,21 @@ Screenshot.belongsTo(Movie, {
 // ================= HOOKS ==============
 
 Movie.afterFind((movie) => {
-  // console.log("🔥", typeof movie.length);
-  if (!movie.length) return;
   if (typeof movie.length == "number") {
     movie.forEach((m) => {
       m.tags = JSON.parse(m.tags);
       m.companies = JSON.parse(m.companies);
-      m.characters = JSON.parse(m.charactors);
+      m.charactors = JSON.parse(m.charactors);
       m.actors = JSON.parse(m.actors);
+      m.directors = JSON.parse(m.directors);
     });
     return;
   }
   movie.tags = JSON.parse(movie.tags);
   movie.companies = JSON.parse(movie.companies);
-  movie.characters = JSON.parse(movie.charactors);
+  movie.charactors = JSON.parse(movie.charactors);
   movie.actors = JSON.parse(movie.actors);
+  movie.directors = JSON.parse(movie.directors);
 });
 
 module.exports = Movie;

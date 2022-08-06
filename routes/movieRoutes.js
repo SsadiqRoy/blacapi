@@ -1,8 +1,8 @@
 const { Router } = require("express");
 
 const controller = require("../controllers/moviesController");
-const { aboveUser } = require("../middlewares/protectMiddleware");
-const { protect } = require("../middlewares/globalMiddleware");
+const { aboveUser, protect } = require("../middlewares/protectMiddleware");
+const { beforeCreate } = require("../middlewares/movieMiddleware");
 
 const router = Router();
 
@@ -13,7 +13,7 @@ router.get("/:id", controller.getOne);
 router.get("/search/:text", controller.search);
 
 router.use(protect, aboveUser);
-router.post("/create", controller.createMovie);
+router.post("/create", beforeCreate, controller.createMovie);
 
 const { updateMovie, deleteMovie } = controller;
 router.route("/:id").patch(updateMovie).delete(deleteMovie);

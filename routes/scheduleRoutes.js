@@ -1,14 +1,14 @@
 const { Router } = require("express");
 
 const controller = require("../controllers/schedulesController");
-const { protect } = require("../middlewares/globalMiddleware");
-const { aboveUser } = require("../middlewares/protectMiddleware");
+const { aboveUser, protect } = require("../middlewares/protectMiddleware");
 
 const router = Router();
 
 //
 router.use(protect, aboveUser);
-router.route("/").post(controller.addSchedule).get(controller.allSchedules);
+router.get("/", controller.allSchedules);
+router.post("/create", controller.addSchedule);
 const { oneSchedule, updateSchedule, deleteSchedule } = controller;
 router
   .route("/:id")

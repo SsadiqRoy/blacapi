@@ -1,15 +1,15 @@
 const { Router } = require("express");
 
 const controller = require("../controllers/screenshotsController");
-const { protect } = require("../middlewares/globalMiddleware");
-const { aboveUser } = require("../middlewares/protectMiddleware");
+const { aboveUser, protect } = require("../middlewares/protectMiddleware");
 
 const router = Router();
 
 //
 
 router.use(protect, aboveUser);
-router.route("/").post(controller.addScreenshot).get(controller.allScreenshots);
+router.post("/", controller.addScreenshot);
+router.get("/create", controller.allScreenshots);
 const { oneScreenshot, updateScreenshot, deleteScreenshot } = controller;
 router
   .route("/:id")

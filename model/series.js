@@ -44,13 +44,13 @@ const Serie = sequelize.define(
 User.hasMany(Serie, {
   sourceKey: "id",
   foreignKey: "user",
-  onDelete: "NO ACTION",
+  onDelete: "SET NULL",
   onUpdate: "NO ACTION",
 });
 Serie.belongsTo(User, {
   targetKey: "id",
   foreignKey: "user",
-  onDelete: "NO ACTION",
+  onDelete: "SET NULL",
   onUpdate: "NO ACTION",
 });
 
@@ -87,21 +87,21 @@ Screenshot.belongsTo(Serie, {
 // ================= HOOKS ==============
 
 Serie.afterFind((serie) => {
-  // console.log("🔥", typeof Serie.length);
-  // if (!serie) return;
   if (typeof serie.length == "number") {
     serie.forEach((m) => {
       m.tags = JSON.parse(m.tags);
       m.companies = JSON.parse(m.companies);
-      m.characters = JSON.parse(m.charactors);
+      m.charactors = JSON.parse(m.charactors);
       m.actors = JSON.parse(m.actors);
+      m.directors = JSON.parse(m.directors);
     });
     return;
   }
   serie.tags = JSON.parse(serie.tags);
   serie.companies = JSON.parse(serie.companies);
-  serie.characters = JSON.parse(serie.characters);
+  serie.charactors = JSON.parse(serie.charactors);
   serie.actors = JSON.parse(serie.actors);
+  serie.directors = JSON.parse(serie.directors);
 });
 
 module.exports = Serie;

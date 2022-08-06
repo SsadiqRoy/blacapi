@@ -1,17 +1,15 @@
 const { Router } = require("express");
 
 const controller = require("../controllers/notificationsController");
-const { protect } = require("../middlewares/globalMiddleware");
-const { aboveUser } = require("../middlewares/protectMiddleware");
+const { aboveUser, protect } = require("../middlewares/protectMiddleware");
 
 const router = Router();
 
 //
 router.use(protect, aboveUser);
-router
-  .route("/")
-  .post(controller.addNotification)
-  .get(controller.allNotifications);
+router.route("/").get(controller.allNotifications);
+router.post("/create", controller.addNotification);
+
 const { oneNotification, updateNotification, deleteNotification } = controller;
 router
   .route("/:id")

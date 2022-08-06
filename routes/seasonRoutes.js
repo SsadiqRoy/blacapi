@@ -1,8 +1,7 @@
 const { Router } = require("express");
 
 const controller = require("../controllers/seasonsController");
-const { protect } = require("../middlewares/globalMiddleware");
-const { aboveUser } = require("../middlewares/protectMiddleware");
+const { aboveUser, protect } = require("../middlewares/protectMiddleware");
 
 const router = Router();
 
