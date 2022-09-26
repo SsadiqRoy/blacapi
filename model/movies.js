@@ -1,12 +1,12 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const sequelize = require("../db");
-const User = require("./user");
-const Link = require("./links");
-const Screenshot = require("./screenshots");
+const sequelize = require('../db');
+const User = require('./user');
+const Link = require('./links');
+const Screenshot = require('./screenshots');
 
 const Movie = sequelize.define(
-  "Movie",
+  'Movie',
   {
     id: {
       type: DataTypes.STRING(50),
@@ -18,9 +18,11 @@ const Movie = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    image: DataTypes.STRING,
+    portrait: DataTypes.STRING,
+    landsacpe: DataTypes.STRING,
     description: DataTypes.STRING(1000),
     tags: DataTypes.JSON,
+    keywords: DataTypes.JSON,
     company: DataTypes.STRING,
     companies: DataTypes.JSON,
     charactors: DataTypes.JSON,
@@ -37,44 +39,44 @@ const Movie = sequelize.define(
 
 // =========== association between user and movie =====
 User.hasMany(Movie, {
-  sourceKey: "id",
-  foreignKey: "user",
-  onDelete: "SET NULL",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'user',
+  onDelete: 'SET NULL',
+  onUpdate: 'NO ACTION',
 });
 Movie.belongsTo(User, {
-  targetKey: "id",
-  foreignKey: "user",
-  onDelete: "SET NULL",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'user',
+  onDelete: 'SET NULL',
+  onUpdate: 'NO ACTION',
 });
 
 // =========== association between Movie and Links
 Movie.hasMany(Link, {
-  sourceKey: "id",
-  foreignKey: "movie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'movie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 Link.belongsTo(Movie, {
-  targetKey: "id",
-  foreignKey: "movie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'movie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 
 // =========== association between Movie and screenshots
 Movie.hasMany(Screenshot, {
-  sourceKey: "id",
-  foreignKey: "movie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'movie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 Screenshot.belongsTo(Movie, {
-  targetKey: "id",
-  foreignKey: "movie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'movie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 
 //
@@ -82,7 +84,7 @@ Screenshot.belongsTo(Movie, {
 // ================= HOOKS ==============
 
 Movie.afterFind((movie) => {
-  if (typeof movie.length == "number") {
+  if (typeof movie.length == 'number') {
     movie.forEach((m) => {
       m.tags = JSON.parse(m.tags);
       m.companies = JSON.parse(m.companies);

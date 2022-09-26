@@ -1,12 +1,12 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const sequelize = require("../db");
-const User = require("./user");
-const Screenshot = require("./screenshots");
-const Season = require("./seasons");
+const sequelize = require('../db');
+const User = require('./user');
+const Screenshot = require('./screenshots');
+const Season = require('./seasons');
 
 const Serie = sequelize.define(
-  "Serie",
+  'Serie',
   {
     id: {
       type: DataTypes.STRING(50),
@@ -18,9 +18,11 @@ const Serie = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    image: DataTypes.STRING,
+    portrait: DataTypes.STRING,
+    landsacpe: DataTypes.STRING,
     description: DataTypes.STRING(1000),
     tags: DataTypes.JSON,
+    keywords: DataTypes.JSON,
     company: DataTypes.STRING,
     companies: DataTypes.JSON,
     charactors: DataTypes.JSON,
@@ -31,55 +33,55 @@ const Serie = sequelize.define(
     rating: DataTypes.STRING(4),
     status: {
       type: DataTypes.ENUM,
-      values: ["ended", "ongoing", "paused", "stopped"],
-      defaultValue: "ongoing",
+      values: ['ended', 'ongoing', 'paused', 'stopped'],
+      defaultValue: 'ongoing',
     },
   },
   {
-    defaultScope: { attributes: { exclude: "UserId" } },
+    defaultScope: { attributes: { exclude: 'UserId' } },
   }
 );
 
 // =========== association between user and Serie =====
 User.hasMany(Serie, {
-  sourceKey: "id",
-  foreignKey: "user",
-  onDelete: "SET NULL",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'user',
+  onDelete: 'SET NULL',
+  onUpdate: 'NO ACTION',
 });
 Serie.belongsTo(User, {
-  targetKey: "id",
-  foreignKey: "user",
-  onDelete: "SET NULL",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'user',
+  onDelete: 'SET NULL',
+  onUpdate: 'NO ACTION',
 });
 
 // =========== association between Serie and Seasons
 Serie.hasMany(Season, {
-  sourceKey: "id",
-  foreignKey: "serie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'serie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 Season.belongsTo(Serie, {
-  targetKey: "id",
-  foreignKey: "serie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'serie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 
 // =========== association between Serie and screenshots
 Serie.hasMany(Screenshot, {
-  sourceKey: "id",
-  foreignKey: "serie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'serie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 Screenshot.belongsTo(Serie, {
-  targetKey: "id",
-  foreignKey: "serie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'serie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 
 //
@@ -87,7 +89,7 @@ Screenshot.belongsTo(Serie, {
 // ================= HOOKS ==============
 
 Serie.afterFind((serie) => {
-  if (typeof serie.length == "number") {
+  if (typeof serie.length == 'number') {
     serie.forEach((m) => {
       m.tags = JSON.parse(m.tags);
       m.companies = JSON.parse(m.companies);
