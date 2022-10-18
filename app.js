@@ -1,52 +1,70 @@
-const express = require("express");
-const cookieparser = require("cookie-parser");
+const express = require('express');
+const cookieparser = require('cookie-parser');
+const cors = require('cors');
 
-const { globalError } = require("./utils/errors");
+const { globalError } = require('./utils/errors');
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieparser());
+app.use(cors());
+// app.options('*', (req, res, next) => {
+// app.use((req, res, next) => {
+//   const origin = req.get('Origin') === 'http://localhost:2500' ? req.get('Origin') : 'https://blaciris.com';
+//   console.log(origin);
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:2500');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
 
-const userRoute = require("./routes/userRoutes");
-const movieRoute = require("./routes/movieRoutes");
-const serieRoute = require("./routes/serieRoutes");
-const gameRoute = require("./routes/gameRoutes");
+//   console.log('done');
+//   res.send();
+// });
+// { origin: ['http://localhost:2500'] }
+
+const userRoute = require('./routes/userRoutes');
+const movieRoute = require('./routes/movieRoutes');
+const serieRoute = require('./routes/serieRoutes');
+const gameRoute = require('./routes/gameRoutes');
 // =======================================================
-const seasonRoute = require("./routes/seasonRoutes");
-const episodeRoute = require("./routes/episodeRoutes");
-const linkRoute = require("./routes/linkRoutes");
-const screenRoute = require("./routes/screenshotRoutes");
-const notificationRoute = require("./routes/notificationRoutes");
-const scheduleRoute = require("./routes/scheduleRoutes");
-const suggestionRoute = require("./routes/suggestionRoutes");
-const problemRoute = require("./routes/problemRoutes");
-const otherRoute = require("./routes/otherRoutes");
+const seasonRoute = require('./routes/seasonRoutes');
+const episodeRoute = require('./routes/episodeRoutes');
+const linkRoute = require('./routes/linkRoutes');
+const screenRoute = require('./routes/screenshotRoutes');
+const notificationRoute = require('./routes/notificationRoutes');
+const scheduleRoute = require('./routes/scheduleRoutes');
+const suggestionRoute = require('./routes/suggestionRoutes');
+const problemRoute = require('./routes/problemRoutes');
+const otherRoute = require('./routes/otherRoutes');
+const { loggedIn } = require('./middlewares/protectMiddleware');
 
 //
 
-app.use("/v1/users", userRoute);
-app.use("/v1/movies", movieRoute);
-app.use("/v1/series", serieRoute);
-app.use("/v1/games", gameRoute);
+app.use(loggedIn);
+app.use('/v1/users', userRoute);
+app.use('/v1/movies', movieRoute);
+app.use('/v1/series', serieRoute);
+app.use('/v1/games', gameRoute);
+
 // =================================================
-app.use("/v1/seasons", seasonRoute);
-app.use("/v1/episodes", episodeRoute);
-app.use("/v1/links", linkRoute);
-app.use("/v1/screenshots", screenRoute);
-app.use("/v1/notifications", notificationRoute);
-app.use("/v1/schedules", scheduleRoute);
-app.use("/v1/suggestions", suggestionRoute);
-app.use("/v1/problems", problemRoute);
-app.use("/v1/others", otherRoute);
+app.use('/v1/seasons', seasonRoute);
+app.use('/v1/episodes', episodeRoute);
+app.use('/v1/links', linkRoute);
+app.use('/v1/screenshots', screenRoute);
+app.use('/v1/notifications', notificationRoute);
+app.use('/v1/schedules', scheduleRoute);
+app.use('/v1/suggestions', suggestionRoute);
+app.use('/v1/problems', problemRoute);
+app.use('/v1/others', otherRoute);
 
 //
 
 //
 
-app.use("*", (req, res, next) => {
-  res.status(404).json({
-    status: "failed",
+app.use('*', (req, res, next) => {
+  res.status(500).json({
+    status: 'failed',
     message: `could not get ${req.originalUrl}`,
   });
 });

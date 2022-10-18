@@ -1,8 +1,8 @@
-const { createId, catchAsync } = require("../utils/utils");
-const ApiFilter = require("../utils/apiFilter");
-const { Op } = require("sequelize");
-const sequelize = require("../db");
-const { searchMatch } = require("../utils/functions");
+const { createId, catchAsync } = require('../utils/utils');
+const ApiFilter = require('../utils/apiFilter');
+const { Op } = require('sequelize');
+const sequelize = require('../db');
+const { searchMatch } = require('../utils/functions');
 
 let nOfInstance = 0;
 /**
@@ -44,7 +44,7 @@ exports.create = (Model) =>
     const data = await this.createInstance(Model, req.body);
 
     res.status(201).json({
-      status: "success",
+      status: 'success',
       data,
     });
   });
@@ -63,7 +63,7 @@ exports.getAll = (Model) =>
     const total = await Model.count({ where: query.where });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       total,
       length: data.length,
       data,
@@ -82,7 +82,7 @@ exports.update = (Model) =>
     const data = await Model.findByPk(req.params.id);
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       meta,
       data,
     });
@@ -99,7 +99,7 @@ exports.deleteOne = (Model) =>
     const data = await Model.destroy({ where: { id: req.params.id } });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       meta: data,
     });
   });
@@ -118,7 +118,7 @@ exports.getOne = (Model, include = undefined) =>
     if (!include) data = await Model.findByPk(req.params.id);
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data,
     });
   });
@@ -132,7 +132,7 @@ exports.getOne = (Model, include = undefined) =>
  */
 exports.search = (Model, fields) =>
   catchAsync(async (req, res, next) => {
-    const text = req.params.text.split("-").join(" ").toLowerCase();
+    const text = req.params.text.split('-').join(' ').toLowerCase();
 
     // building search option on fields
     const queryFields = searchMatch(fields, text);
@@ -147,7 +147,7 @@ exports.search = (Model, fields) =>
     const total = await Model.count({ where: query.where });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       meta: {
         length: data.length,
         page: api.page,

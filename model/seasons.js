@@ -10,6 +10,8 @@ const Season = sequelize.define('Season', {
     primaryKey: true,
     unique: true,
   },
+  description: DataTypes.STRING,
+  number: DataTypes.INTEGER,
   season: DataTypes.INTEGER,
   title: DataTypes.STRING,
   portrait: DataTypes.STRING,

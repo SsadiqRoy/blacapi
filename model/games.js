@@ -36,6 +36,7 @@ User.hasMany(Game, {
   onDelete: 'SET NULL',
   onUpdate: 'NO ACTION',
 });
+
 Game.belongsTo(User, {
   targetKey: 'id',
   foreignKey: 'user',

@@ -1,8 +1,8 @@
-const { promisify } = require("util");
-const jwt = require("jsonwebtoken");
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
 
-const User = require("../model/user");
-const { catchAsync, userRoleLevel } = require("../utils/utils");
+const User = require('../model/user');
+const { catchAsync, userRoleLevel } = require('../utils/utils');
 
 //
 /**
@@ -10,8 +10,9 @@ const { catchAsync, userRoleLevel } = require("../utils/utils");
  */
 exports.protect = catchAsync(async (req, res, next) => {
   // console.log(req);
+  if (req.user) return next;
   const cookie = req.cookies[process.env.login];
-  if (!cookie) return next(new Error("login to get access"));
+  if (!cookie) return next(new Error('login to get access'));
 
   // decoding the cookie
   const decode = await promisify(jwt.verify)(cookie, process.env.loginToken);
@@ -21,21 +22,51 @@ exports.protect = catchAsync(async (req, res, next) => {
   console.log({ exp, id, iat });
   const user = await User.findByPk(id);
   // console.log(user);
-  if (!user.active) return next(new Error("your account is not active"));
+  if (!user.active) return next(new Error('your account is not active'));
 
   // checking for cookie expery
-  if (Date.now() > exp * 1000) return next(new Error("please log in again"));
+  if (Date.now() > exp * 1000) return next(new Error('please log in again'));
 
   // checking if password has been changed after loggin in and no new cookie
-  if (
-    user.passwordChangedAt &&
-    new Date(user.passwordChangedAt).getTime() > iat * 1000
-  ) {
-    return next(new Error("please log again"));
+  if (user.passwordChangedAt && new Date(user.passwordChangedAt).getTime() > iat * 1000) {
+    return next(new Error('please log again'));
   }
 
   req.user = user;
-  if (user.role === "employee") req.admin = user;
+  if (userRoleLevel(user.role) > 1) req.admin = user;
+  next();
+});
+
+//
+/**
+ * prevents unlogged in users
+ */
+exports.loggedIn = catchAsync(async (req, res, next) => {
+  // console.log('first hit');
+  // console.log(req);
+  const cookie = req.cookies[process.env.login];
+  if (!cookie) return next();
+
+  // decoding the cookie
+  const decode = await promisify(jwt.verify)(cookie, process.env.loginToken);
+  const { exp, id, iat } = decode;
+
+  // checking for active account
+  // console.log({ exp, id, iat });
+  const user = await User.findByPk(id);
+  // console.log(user);
+  if (!user.active) return next();
+
+  // checking for cookie expery
+  if (Date.now() > exp * 1000) return next();
+
+  // checking if password has been changed after loggin in and no new cookie
+  if (user.passwordChangedAt && new Date(user.passwordChangedAt).getTime() > iat * 1000) {
+    return next();
+  }
+
+  req.user = user;
+  if (userRoleLevel(user.role) > 1) req.admin = user;
   next();
 });
 
@@ -45,8 +76,7 @@ exports.protect = catchAsync(async (req, res, next) => {
  */
 exports.aboveUser = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 2)
-    return next(new Error("you do not have access to perform this action"));
+  if (userRoleLevel(role) < 2) return next(new Error('you do not have access to perform this action'));
 
   next();
 });
@@ -56,8 +86,7 @@ exports.aboveUser = catchAsync(async (req, res, next) => {
  */
 exports.aboveEployee = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 3)
-    return next(new Error("you do not have access to perform this action"));
+  if (userRoleLevel(role) < 3) return next(new Error('you do not have access to perform this action'));
 
   next();
 });
@@ -67,8 +96,7 @@ exports.aboveEployee = catchAsync(async (req, res, next) => {
  */
 exports.aboveAdmin = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 4)
-    return next(new Error("you do not have access to perform this action"));
+  if (userRoleLevel(role) < 4) return next(new Error('you do not have access to perform this action'));
 
   next();
 });
@@ -78,8 +106,7 @@ exports.aboveAdmin = catchAsync(async (req, res, next) => {
  */
 exports.aboveSuperAdmin = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 5)
-    return next(new Error("you do not have access to perform this action"));
+  if (userRoleLevel(role) < 5) return next(new Error('you do not have access to perform this action'));
 
   next();
 });
