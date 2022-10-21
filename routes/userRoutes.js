@@ -16,6 +16,7 @@ router.get('/loggedin', controller.isLoggedIn);
 
 const { oneUser, updateUser, deleteUser } = controller;
 router.route('/:id').get(oneUser).patch(updateUser).delete(deleteUser);
+router.patch('/changepassword/:id', controller.changePassword);
 
 router.use(aboveEployee); // only position above employee are allowed
 router.route('/').get(controller.allUsers);

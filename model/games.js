@@ -17,13 +17,14 @@ const Game = sequelize.define('Game', {
     allowNull: false,
   },
   portrait: DataTypes.STRING,
-  landsacpe: DataTypes.STRING,
+  landscape: DataTypes.STRING,
   description: DataTypes.STRING,
-  about: DataTypes.STRING(1234),
+  about: DataTypes.STRING(2234),
   tags: DataTypes.JSON,
   keywords: DataTypes.JSON,
   company: DataTypes.STRING,
   companies: DataTypes.JSON,
+  rating: DataTypes.STRING(4),
   releasedDate: DataTypes.DATEONLY,
 });
 
@@ -79,16 +80,17 @@ Screenshot.belongsTo(Game, {
 // ================= HOOKS ==============
 
 Game.afterFind((game) => {
+  // console.log(game);
   // console.log("🔥", typeof game.length);
-  if (typeof game.length == 'number') {
-    game.forEach((g) => {
-      g.tags = JSON.parse(g.tags);
-      g.companies = JSON.parse(g.companies);
-    });
-    return;
-  }
-  game.tags = JSON.parse(game.tags);
-  game.companies = JSON.parse(game.companies);
+  // if (typeof game.length == 'number') {
+  //   game.forEach((g) => {
+  //     g.tags = JSON.parse(g.tags);
+  //     g.companies = JSON.parse(g.companies);
+  //   });
+  //   return;
+  // }
+  // game.tags = JSON.parse(game.tags);
+  // game.companies = JSON.parse(game.companies);
 });
 
 module.exports = Game;

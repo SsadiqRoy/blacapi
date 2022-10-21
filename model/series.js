@@ -19,7 +19,7 @@ const Serie = sequelize.define(
       allowNull: false,
     },
     portrait: DataTypes.STRING,
-    landsacpe: DataTypes.STRING,
+    landscape: DataTypes.STRING,
     description: DataTypes.STRING(1000),
     tags: DataTypes.JSON,
     keywords: DataTypes.JSON,

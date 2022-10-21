@@ -1,11 +1,11 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const sequelize = require("../db");
+const sequelize = require('../db');
 
 const User = sequelize.define(
-  "User",
+  'User',
   {
     id: {
       type: DataTypes.STRING(50),
@@ -31,16 +31,16 @@ const User = sequelize.define(
     },
     photo: {
       type: DataTypes.STRING(70),
-      defaultValue: "default.jpg",
+      defaultValue: 'default.jpg',
     },
     role: {
       type: DataTypes.ENUM,
-      values: ["user", "employee", "admin", "superadmin", "ssadiq"],
-      defaultValue: "user",
+      values: ['user', 'employee', 'admin', 'superadmin', 'ssadiq'],
+      defaultValue: 'user',
     },
     position: {
       type: DataTypes.STRING(20),
-      defaultValue: "user",
+      defaultValue: 'user',
     },
     active: {
       type: DataTypes.BOOLEAN,
@@ -49,17 +49,17 @@ const User = sequelize.define(
     passwordChangedAt: DataTypes.DATE,
   },
   {
-    defaultScope: { attributes: { exclude: ["password"] } },
+    defaultScope: { attributes: { exclude: ['password'] } },
   }
 );
 
 User.afterCreate((user) => {
-  user.dataValues.password = "";
+  user.dataValues.password = '';
 });
 User.beforeValidate(async (user) => {
   if (user.password) {
     user.password = await bcrypt.hash(user.password, 12);
-    console.log(user.password);
+    // console.log(user.password);
   }
 });
 

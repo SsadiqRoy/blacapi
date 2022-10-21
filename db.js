@@ -7,21 +7,11 @@ const { Sequelize } = require('sequelize');
  */
 function getConfigOptions() {
   // retrurning evironment variables depending on localhost
-  if (process.env.platform === 'local') {
-    const { dbl_name, dbl_password, dbl_user, dbl_host, dbl_port, dbl_dialect } = process.env;
-    return {
-      option1: { name: dbl_name, password: dbl_password, user: dbl_user },
-      option2: { host: dbl_host, port: +dbl_port, dialect: dbl_dialect },
-    };
-  }
-  // retrurning evironment variables depending on online
-  if (process.env.platform === 'online') {
-    const { DB_NAME, DB_BETA_NAME, DB_PASSWORD, DB_USER, DB_HOST, DB_PORT, DB_DIALECT, runon } = process.env;
-    return {
-      option1: { name: runon === 'beta' ? DB_BETA_NAME : DB_NAME, password: DB_PASSWORD, user: DB_USER },
-      option2: { host: DB_HOST, port: +DB_PORT, dialect: DB_DIALECT },
-    };
-  }
+  const { db_name, db_password, db_user, db_host, db_port, db_dialect } = process.env;
+  return {
+    option1: { name: db_name, password: db_password, user: db_user },
+    option2: { host: db_host, port: +db_port, dialect: db_dialect },
+  };
 }
 
 // getting variables for connections

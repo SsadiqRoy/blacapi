@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { promisify } = require('util');
 
 const User = require('../model/user');
 
@@ -11,8 +12,6 @@ const { catchAsync } = require('../utils/utils');
 
 exports.signup = catchAsync(async (req, res, next) => {
   const { email, name, password } = req.body;
-  // console.log(req.headers);
-  // console.log(req.body);
   // checking for the requirments
   if (!email || !name || !password) return next(new Error('email, name and password are all required'));
 
@@ -99,6 +98,12 @@ exports.logout = catchAsync(async (req, res, next) => {
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
   // console.log(req);
+  if (req.user) {
+    return res.status(200).json({
+      status: 'success',
+      data: req.user,
+    });
+  }
   const cookie = req.cookies[process.env.login];
   if (!cookie) return next(new Error('login to get access'));
 
@@ -107,7 +112,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   const { exp, id, iat } = decode;
 
   // checking for active account
-  console.log({ exp, id, iat });
+  // console.log({ exp, id, iat });
   const user = await User.findByPk(id);
   // console.log(user);
   if (!user.active) return next(new Error('your account is not active'));
@@ -128,16 +133,34 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
 
 // exports.updateUser = update(User);
 exports.updateUser = catchAsync(async (req, res, next) => {
-  // preventing change of role by users
-  if (req.body.role) delete req.body.role;
+  const { name, email } = req.body;
+  const body = { name, email };
 
-  const meta = await User.update(req.body, { where: { id: req.params.id } });
+  const meta = await User.update(body, { where: { id: req.params.id } });
   const data = await User.findByPk(req.params.id);
 
   res.status(200).json({
     status: 'success',
     meta,
     data,
+  });
+});
+
+exports.changePassword = catchAsync(async (req, res, next) => {
+  const { oldPassword, password } = req.body;
+
+  if (!oldPassword || !password) return next(new Error('Old password or New password is not available'));
+  const user = await User.findByPk(req.params.id, { attributes: { include: 'password' } });
+  // console.log(user.password);
+  const valid = await bcrypt.compare(oldPassword, user.password);
+
+  if (!valid) return next(new Error('password is incorrect'));
+
+  const newUser = await User.update({ password, passwordChangedAt: Date.now() }, { where: { id: req.params.id } });
+
+  res.status(203).json({
+    status: 'success',
+    data: newUser,
   });
 });
 

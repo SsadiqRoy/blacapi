@@ -12,7 +12,7 @@ class ApiFilter {
   }
 
   filter() {
-    const excluded = ["page", "limit", "order"];
+    const excluded = ['page', 'limit', 'order'];
     const newq = { ...this.oldq };
     excluded.forEach((e) => {
       if (newq[e]) delete newq[e];
@@ -32,10 +32,13 @@ class ApiFilter {
   sort() {
     if (this.oldq.order) {
       const list = [];
-      const values = this.oldq.order.split(",");
+      const values = this.oldq.order.split(',');
       values.forEach((value, i) => {
         if (i % 2 !== 0) return;
-        list.push([value, values[i + 1].toUpperCase()]);
+        const column = value;
+        const order = values[i + 1] ? values[i + 1].toUpperCase() : 'ASC';
+        // console.log([value, values[i + 1]]);
+        list.push([column, order]);
       });
       this.query.order = list;
     }

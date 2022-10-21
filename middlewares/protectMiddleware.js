@@ -10,7 +10,7 @@ const { catchAsync, userRoleLevel } = require('../utils/utils');
  */
 exports.protect = catchAsync(async (req, res, next) => {
   // console.log(req);
-  if (req.user) return next;
+  if (req.user) return next();
   const cookie = req.cookies[process.env.login];
   if (!cookie) return next(new Error('login to get access'));
 
@@ -43,7 +43,7 @@ exports.protect = catchAsync(async (req, res, next) => {
  */
 exports.loggedIn = catchAsync(async (req, res, next) => {
   // console.log('first hit');
-  // console.log(req);
+  console.log('👉', req.cookies);
   const cookie = req.cookies[process.env.login];
   if (!cookie) return next();
 

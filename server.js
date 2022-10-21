@@ -14,7 +14,7 @@ async function connectDB() {
     await sequelize.authenticate();
     await sequelize.sync();
     // sequelize.sync({ alter: true });
-    console.log('connection successfull');
+    console.log('🛩 blacapi db connected....');
   } catch (error) {
     console.log('DB_CONNECTION🔥', error);
   }
@@ -25,7 +25,7 @@ connectDB();
 const app = require('./app');
 
 // creating server for the app
-const server = app.listen(process.env.port, process.env.host, () => console.log('we are listenning...'));
+const server = app.listen(process.env.port, process.env.host, () => console.log('blacapi server started...'));
 
 process.on('unhandledRejection', (error) => {
   console.log(error);

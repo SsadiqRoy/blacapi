@@ -111,10 +111,10 @@ exports.deleteOne = (Model) =>
  * @param {Array} include fields to populate
  * @returns null  - sends response
  */
-exports.getOne = (Model, include = undefined) =>
+exports.getOne = (Model, include = undefined, order = undefined) =>
   catchAsync(async (req, res, next) => {
     let data;
-    if (include) data = await Model.findByPk(req.params.id, { include });
+    if (include) data = await Model.findByPk(req.params.id, { include, order });
     if (!include) data = await Model.findByPk(req.params.id);
 
     res.status(200).json({
@@ -125,10 +125,11 @@ exports.getOne = (Model, include = undefined) =>
 
 //
 /**
- * search for matching data in a table
+ * search for matching data in a table. More fields are added if more fields are to be considered in the search
  * @param {Object} Model sequlize schema
- * @param {[Array]} fields [ [colums name, array|string] ] - Array of arrays
+ * @param {[Array]} fields [ [colums name, string(0) | array(1)] ] - Array of arrays
  * @returns null  - sends response
+ * each sub array in the array of fields should contain the name of a column and a number (0 or 1) indicating whether the field is String or Array respectively
  */
 exports.search = (Model, fields) =>
   catchAsync(async (req, res, next) => {

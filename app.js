@@ -8,20 +8,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieparser());
-app.use(cors());
-// app.options('*', (req, res, next) => {
-// app.use((req, res, next) => {
-//   const origin = req.get('Origin') === 'http://localhost:2500' ? req.get('Origin') : 'https://blaciris.com';
-//   console.log(origin);
-//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:2500');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-
-//   console.log('done');
-//   res.send();
-// });
-// { origin: ['http://localhost:2500'] }
+app.use(cors({ origin: ['http://localhost:2500'], credentials: true }));
 
 const userRoute = require('./routes/userRoutes');
 const movieRoute = require('./routes/movieRoutes');
