@@ -43,7 +43,7 @@ exports.protect = catchAsync(async (req, res, next) => {
  */
 exports.loggedIn = catchAsync(async (req, res, next) => {
   // console.log('first hit');
-  console.log('👉', req.cookies);
+  // console.log('👉', req.cookies);
   const cookie = req.cookies[process.env.login];
   if (!cookie) return next();
 

@@ -45,18 +45,18 @@ Notification.belongsTo(User, {
   onDelete: 'CASCADE',
   onUpdate: 'NO ACTION',
 });
-User.hasMany(Notification, {
-  sourceKey: 'id',
-  as: 'to',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
-Notification.belongsTo(User, {
-  targetKey: 'id',
-  as: 'to',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
+// User.hasMany(Notification, {
+//   sourceKey: 'id',
+//   as: 'to',
+//   onDelete: 'CASCADE',
+//   onUpdate: 'NO ACTION',
+// });
+// Notification.belongsTo(User, {
+//   targetKey: 'id',
+//   as: 'to',
+//   onDelete: 'CASCADE',
+//   onUpdate: 'NO ACTION',
+// });
 
 // ========================= association between Problem and Notification
 Problem.hasMany(Notification, {

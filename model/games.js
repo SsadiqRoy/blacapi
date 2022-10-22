@@ -3,7 +3,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const User = require('./user');
 const Link = require('./links');
-const Screenshot = require('./screenshots');
 
 const Game = sequelize.define('Game', {
   id: {
@@ -16,8 +15,8 @@ const Game = sequelize.define('Game', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  portrait: DataTypes.STRING,
-  landscape: DataTypes.STRING,
+  portrait: DataTypes.STRING(500),
+  landscape: DataTypes.STRING(500),
   description: DataTypes.STRING,
   about: DataTypes.STRING(2234),
   tags: DataTypes.JSON,
@@ -54,21 +53,6 @@ Game.hasMany(Link, {
 });
 
 Link.belongsTo(Game, {
-  targetKey: 'id',
-  foreignKey: 'game',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
-
-// // ============= Games associating with screenshots
-Game.hasMany(Screenshot, {
-  sourceKey: 'id',
-  foreignKey: 'game',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
-
-Screenshot.belongsTo(Game, {
   targetKey: 'id',
   foreignKey: 'game',
   onDelete: 'CASCADE',

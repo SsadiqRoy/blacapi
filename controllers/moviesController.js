@@ -11,7 +11,7 @@ exports.createMovie = create(Movie);
 exports.updateMovie = update(Movie);
 exports.deleteMovie = deleteOne(Movie);
 exports.getAll = getAll(Movie);
-exports.getOne = getOne(Movie, ['User', 'Link', 'Screenshots'], [['Links', 'resolution', 'ASC']]);
+exports.getOne = getOne(Movie, ['User', 'Links', 'Screenshots'], [['Links', 'resolution', 'ASC']]);
 exports.search = search(Movie, [
   ['title', 0],
   ['country', 0],

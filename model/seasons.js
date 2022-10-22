@@ -14,8 +14,8 @@ const Season = sequelize.define('Season', {
   number: DataTypes.INTEGER,
   season: DataTypes.INTEGER,
   title: DataTypes.STRING,
-  portrait: DataTypes.STRING,
-  landscape: DataTypes.STRING,
+  portrait: DataTypes.STRING(500),
+  landscape: DataTypes.STRING(500),
   releasedDate: DataTypes.DATEONLY,
 });
 

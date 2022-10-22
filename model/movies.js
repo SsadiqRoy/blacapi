@@ -3,7 +3,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const User = require('./user');
 const Link = require('./links');
-const Screenshot = require('./screenshots');
 
 const Movie = sequelize.define(
   'Movie',
@@ -18,8 +17,8 @@ const Movie = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    portrait: DataTypes.STRING,
-    landscape: DataTypes.STRING,
+    portrait: DataTypes.STRING(500),
+    landscape: DataTypes.STRING(500),
     description: DataTypes.STRING(1000),
     tags: DataTypes.JSON,
     keywords: DataTypes.JSON,
@@ -59,20 +58,6 @@ Movie.hasMany(Link, {
   onUpdate: 'NO ACTION',
 });
 Link.belongsTo(Movie, {
-  targetKey: 'id',
-  foreignKey: 'movie',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
-
-// =========== association between Movie and screenshots
-Movie.hasMany(Screenshot, {
-  sourceKey: 'id',
-  foreignKey: 'movie',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
-Screenshot.belongsTo(Movie, {
   targetKey: 'id',
   foreignKey: 'movie',
   onDelete: 'CASCADE',

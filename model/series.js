@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize');
 
 const sequelize = require('../db');
 const User = require('./user');
-const Screenshot = require('./screenshots');
 const Season = require('./seasons');
 
 const Serie = sequelize.define(
@@ -18,8 +17,8 @@ const Serie = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    portrait: DataTypes.STRING,
-    landscape: DataTypes.STRING,
+    portrait: DataTypes.STRING(500),
+    landscape: DataTypes.STRING(500),
     description: DataTypes.STRING(1000),
     tags: DataTypes.JSON,
     keywords: DataTypes.JSON,
@@ -70,40 +69,26 @@ Season.belongsTo(Serie, {
   onUpdate: 'NO ACTION',
 });
 
-// =========== association between Serie and screenshots
-Serie.hasMany(Screenshot, {
-  sourceKey: 'id',
-  foreignKey: 'serie',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
-Screenshot.belongsTo(Serie, {
-  targetKey: 'id',
-  foreignKey: 'serie',
-  onDelete: 'CASCADE',
-  onUpdate: 'NO ACTION',
-});
-
 //
 
 // ================= HOOKS ==============
 
 Serie.afterFind((serie) => {
-  if (typeof serie.length == 'number') {
-    serie.forEach((m) => {
-      m.tags = JSON.parse(m.tags);
-      m.companies = JSON.parse(m.companies);
-      m.charactors = JSON.parse(m.charactors);
-      m.actors = JSON.parse(m.actors);
-      m.directors = JSON.parse(m.directors);
-    });
-    return;
-  }
-  serie.tags = JSON.parse(serie.tags);
-  serie.companies = JSON.parse(serie.companies);
-  serie.charactors = JSON.parse(serie.charactors);
-  serie.actors = JSON.parse(serie.actors);
-  serie.directors = JSON.parse(serie.directors);
+  // if (typeof serie.length == 'number') {
+  //   serie.forEach((m) => {
+  //     m.tags = JSON.parse(m.tags);
+  //     m.companies = JSON.parse(m.companies);
+  //     m.charactors = JSON.parse(m.charactors);
+  //     m.actors = JSON.parse(m.actors);
+  //     m.directors = JSON.parse(m.directors);
+  //   });
+  //   return;
+  // }
+  // serie.tags = JSON.parse(serie.tags);
+  // serie.companies = JSON.parse(serie.companies);
+  // serie.charactors = JSON.parse(serie.charactors);
+  // serie.actors = JSON.parse(serie.actors);
+  // serie.directors = JSON.parse(serie.directors);
 });
 
 module.exports = Serie;
