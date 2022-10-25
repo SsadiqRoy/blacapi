@@ -25,8 +25,8 @@ const problemRoute = require('./routes/problemRoutes');
 const otherRoute = require('./routes/otherRoutes');
 
 const { loggedIn } = require('./middlewares/protectMiddleware');
-const { updater } = require('./utils/utils');
-const { initializeAllSchedules } = require('./controllers/schedulesController');
+// const { updater } = require('./utils/utils');
+// const { initializeAllSchedules } = require('./controllers/schedulesController');
 
 //
 // updater(initializeAllSchedules);

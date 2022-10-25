@@ -10,7 +10,7 @@ exports.addGame = create(Game);
 exports.updateGame = update(Game);
 exports.deleteGame = deleteOne(Game);
 exports.allGames = getAll(Game);
-exports.oneGame = getOne(Game, ['User', 'Links', 'Screenshots'], [['Links', 'part', 'ASC']]);
+exports.oneGame = getOne(Game, ['User', 'Links'], [['Links', 'part', 'ASC']]);
 exports.search = search(Game, [
   ['title', 0],
   ['tags', 1],

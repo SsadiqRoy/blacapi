@@ -10,7 +10,7 @@ const router = Router();
 
 router.get("/", controller.allGames);
 router.route("/:id").get(controller.oneGame);
-router.get("/search/:text", controller.search);
+router.get("/search", controller.search);
 
 router.use(protect, aboveUser);
 router.route("/create").post(beforeCreate, controller.addGame);

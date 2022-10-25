@@ -9,7 +9,7 @@ const router = Router();
 //
 
 router.get('/', controller.allSeries);
-router.get('/search/:text', controller.search);
+router.get('/search', controller.search);
 router.get('/:id', controller.oneSerie);
 
 router.use(protect, aboveUser);

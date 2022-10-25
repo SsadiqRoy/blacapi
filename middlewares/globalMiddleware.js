@@ -58,15 +58,24 @@ exports.create = (Model) =>
  */
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const query = new ApiFilter(req.query).query;
-    console.log(query);
+    const api = new ApiFilter(req.query);
+    const query = api.query;
+
+    console.log('👉', query);
     const data = await Model.findAll(query);
     const total = await Model.count({ where: query.where });
 
+    const meta = {
+      length: data.length,
+      page: api.page,
+      limit: query.limit,
+      total,
+      text: req.query.text,
+    };
+
     res.status(200).json({
       status: 'success',
-      total,
-      length: data.length,
+      meta,
       data,
     });
   });
@@ -134,10 +143,12 @@ exports.getOne = (Model, include = undefined, order = undefined) =>
  */
 exports.search = (Model, fields) =>
   catchAsync(async (req, res, next) => {
-    const text = req.params.text.split('-').join(' ').toLowerCase();
+    const oldQuery = { ...req.query };
+    const allText = req.query.text.split('-');
+    const text = req.query.text.split('-').join(' ').toLowerCase();
 
     // building search option on fields
-    const queryFields = searchMatch(fields, text);
+    let queryFields = searchMatch(fields, text);
 
     // creating queries
     const api = new ApiFilter(req.query);
@@ -148,14 +159,46 @@ exports.search = (Model, fields) =>
     const data = await Model.findAll(query);
     const total = await Model.count({ where: query.where });
 
+    const meta = {
+      length: data.length,
+      page: api.page,
+      limit: query.limit,
+      total,
+      text,
+    };
+
+    //
+
+    //
+    // ============== REMAKING THE  QUERY AGAIN WIHT THE WORDS SPLIT TO INDIVIDUAL
+    // id of already found items to exclued
+    const notInIds = data.map((data) => data.id);
+    // desingin an new query
+    const newApi = new ApiFilter(oldQuery);
+    const newQuery = newApi.query;
+    // creating a search query for each word
+    let newQueryFieldArr = [];
+    allText.forEach((t) => {
+      const newQueryFields = searchMatch(fields, t);
+      newQueryFieldArr = [...newQueryFieldArr, ...newQueryFields];
+    });
+    // associating the new where clause of the query
+    newQuery.where = { [Op.or]: newQueryFieldArr };
+    // adding excluded id to the query
+    newQuery.where.id = { [Op.notIn]: notInIds };
+    const newData = await Model.findAll(newQuery);
+    // if(data.length)
+    // data = [...data, ...newData];
+    // }
+
+    //
+
+    //
+
     res.status(200).json({
       status: 'success',
-      meta: {
-        length: data.length,
-        page: api.page,
-        limit: query.limit,
-        total,
-      },
+      meta,
       data,
+      suggestion: newData,
     });
   });

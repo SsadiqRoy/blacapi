@@ -20,7 +20,7 @@ router.patch('/changepassword/:id', controller.changePassword);
 
 router.use(aboveEployee); // only position above employee are allowed
 router.route('/').get(controller.allUsers);
-router.get('/search/:text', controller.search);
+router.get('/search', controller.search);
 
 // adding or removing an employee an employee
 router.patch('/employee/:id', updateUser);
