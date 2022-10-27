@@ -1,19 +1,15 @@
 const { promisify } = require('util');
 const fs = require('fs');
-const { updater } = require('./utils');
+// const { updater } = require('./utils');
 
 exports.globalError = async (error, req, res, next) => {
   error.oldmessage = error.message;
-  const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
   error.date = new Date().toISOString();
-  errors.push(error);
+  error.type = 'Global Error';
 
   fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
     if (e) {
       console.log(e);
-      fs.writeFile('./errors/writeError.json', JSON.stringify(e), (e) => {
-        if (e) console.log(e);
-      });
     }
   });
   // if (errors.length) {
