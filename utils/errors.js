@@ -1,10 +1,11 @@
+const { promisify } = require('util');
 const fs = require('fs');
 const { updater } = require('./utils');
 
 exports.globalError = (error, req, res, next) => {
   error.oldmessage = error.message;
   updater(async () => {
-    const errors = JSON.parse(await fs.readFile(`./errors/error.js`));
+    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.js`));
     error.date = date.now();
     error.push(error);
     fs.writeFile('./errors/error.json', JSON.stringify(errors));
