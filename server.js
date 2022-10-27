@@ -4,12 +4,14 @@ const dotenv = require('dotenv');
 
 process.on('uncaughtException', async (error) => {
   console.log(error);
-  const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.js`));
-  error.date = date.now();
+  const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
+  error.date = new Date().toISOString();
   error.type = 'uncaughtException';
-  error.push(error);
+  errors.push(error);
 
-  fs.writeFile('./errors/error.json', JSON.stringify(errors));
+  fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+    if (e) console.log(e);
+  });
   process.exit(1);
 });
 
@@ -24,6 +26,17 @@ async function connectDB() {
     // sequelize.sync({ alter: true });
     console.log('🎁🎁 blacapi db connected....');
   } catch (error) {
+    // if (error) {
+    // }
+    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
+    error.date = new Date().toISOString();
+    console.log(errors);
+    error.type = 'creating server';
+    errors.push(error);
+    fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+      if (e) console.log(e);
+      process.exit(1);
+    });
     console.log('DB_CONNECTION🔥', error);
   }
 }
@@ -36,10 +49,13 @@ console.log('about to start app');
 // creating server for the app
 const server = app.listen(process.env.port, process.env.host, async (error) => {
   if (error) {
-    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.js`));
-    error.date = date.now();
+    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
+    error.date = new Date().toISOString();
     error.type = 'creating server';
-    error.push(error);
+    errors.push(error);
+    fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+      if (e) console.log(e);
+    });
   }
   console.log('blacapi server started...');
 });
@@ -48,12 +64,14 @@ console.log('app successfully started');
 process.on('unhandledRejection', (error) => {
   console.log(error);
   server.close(async () => {
-    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.js`));
-    error.date = date.now();
+    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
+    error.date = new Date().toISOString();
     error.type = 'unhandledRejection';
-    error.push(error);
+    errors.push(error);
 
-    fs.writeFile('./errors/error.json', JSON.stringify(errors));
+    fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+      if (e) console.log(e);
+    });
     process.exit(1);
   });
 });
