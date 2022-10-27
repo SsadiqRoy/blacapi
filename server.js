@@ -10,7 +10,12 @@ process.on('uncaughtException', async (error) => {
   errors.push(error);
 
   fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-    if (e) console.log(e);
+    if (e) {
+      console.log(e);
+      fs.writeFile('./errors/writeError.json', JSON.stringify(e), (e) => {
+        if (e) console.log(e);
+      });
+    }
   });
   process.exit(1);
 });
