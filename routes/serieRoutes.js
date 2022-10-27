@@ -15,6 +15,6 @@ router.get('/:id', controller.oneSerie);
 router.use(protect, aboveUser);
 const { updateSerie, deleteSerie } = controller;
 router.route('/create').post(beforeCreate, controller.addSerie);
-router.route('/:id').patch(updateSerie).delete(deleteSerie);
+router.route('/:id').patch(beforeCreate, updateSerie).delete(deleteSerie);
 //
 module.exports = router;

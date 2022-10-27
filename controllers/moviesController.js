@@ -15,8 +15,7 @@ exports.getOne = getOne(Movie, ['User', 'Links'], [['Links', 'resolution', 'ASC'
 exports.search = search(Movie, [
   ['title', 0],
   ['country', 0],
-  ['tags', 1],
   ['companies', 1],
   ['charactors', 1],
-  ['actors', 1],
+  ['keywords', 1],
 ]);

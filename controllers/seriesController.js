@@ -20,8 +20,8 @@ exports.oneSerie = getOne(
 exports.search = search(Serie, [
   ['title', 0],
   ['country', 0],
-  ['tags', 1],
+  ['keywords', 1],
   ['companies', 1],
   ['charactors', 1],
-  ['actors', 1],
+  ['status', 0],
 ]);

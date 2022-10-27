@@ -14,7 +14,7 @@ async function connectDB() {
     await sequelize.authenticate();
     await sequelize.sync();
     // sequelize.sync({ alter: true });
-    console.log('🛩 blacapi db connected....');
+    console.log('🎁🎁 blacapi db connected....');
   } catch (error) {
     console.log('DB_CONNECTION🔥', error);
   }

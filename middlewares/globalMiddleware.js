@@ -106,7 +106,8 @@ exports.update = (Model) =>
  */
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const data = await Model.destroy({ where: { id: req.params.id } });
+    const data = await Model.findByPk(req.params.id);
+    await Model.destroy({ where: { id: req.params.id } });
 
     res.status(200).json({
       status: 'success',
@@ -155,6 +156,8 @@ exports.search = (Model, fields) =>
     const query = api.query;
     query.where = { [Op.or]: queryFields };
 
+    console.log('👉', query.where);
+
     // making queries
     const data = await Model.findAll(query);
     const total = await Model.count({ where: query.where });
@@ -180,6 +183,8 @@ exports.search = (Model, fields) =>
     let newQueryFieldArr = [];
     allText.forEach((t) => {
       const newQueryFields = searchMatch(fields, t);
+
+      console.log('👉', newQueryFields[3]);
       newQueryFieldArr = [...newQueryFieldArr, ...newQueryFields];
     });
     // associating the new where clause of the query
@@ -187,9 +192,8 @@ exports.search = (Model, fields) =>
     // adding excluded id to the query
     newQuery.where.id = { [Op.notIn]: notInIds };
     const newData = await Model.findAll(newQuery);
-    // if(data.length)
-    // data = [...data, ...newData];
-    // }
+
+    console.log('👉', newQuery.where);
 
     //
 

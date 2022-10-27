@@ -16,6 +16,6 @@ router.use(protect, aboveUser);
 router.post('/create', beforeCreate, controller.createMovie);
 
 const { updateMovie, deleteMovie } = controller;
-router.route('/:id').patch(updateMovie).delete(deleteMovie);
+router.route('/:id').patch(beforeCreate, updateMovie).delete(deleteMovie);
 //
 module.exports = router;
