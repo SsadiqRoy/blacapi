@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieparser());
-app.use(cors({ origin: ['http://localhost:2500'], credentials: true }));
+app.use(cors({ origin: [`${process.env.cors_allowed}`], credentials: true }));
 
 const userRoute = require('./routes/userRoutes');
 const movieRoute = require('./routes/movieRoutes');
