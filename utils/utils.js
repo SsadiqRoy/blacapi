@@ -17,5 +17,5 @@ exports.userRoleLevel = (role) => {
 };
 
 exports.updater = async function (fn) {
-  fn();
+  await fn();
 };
