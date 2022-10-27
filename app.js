@@ -6,6 +6,8 @@ const { globalError } = require('./utils/errors');
 
 const app = express();
 
+//
+
 app.use(express.json());
 app.use(cookieparser());
 app.use(cors({ origin: [`${process.env.cors_allowed}`], credentials: true }));
