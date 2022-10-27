@@ -8,16 +8,16 @@ exports.globalError = async (error, req, res, next) => {
   error.date = new Date().toISOString();
   errors.push(error);
 
-  if (errors.length) {
-    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
-      if (e) {
-        console.log(e);
-        fs.writeFile('./errors/writeError.json', JSON.stringify(e), (e) => {
-          if (e) console.log(e);
-        });
-      }
-    });
-  }
+  fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
+    if (e) {
+      console.log(e);
+      fs.writeFile('./errors/writeError.json', JSON.stringify(e), (e) => {
+        if (e) console.log(e);
+      });
+    }
+  });
+  // if (errors.length) {
+  // }
   // updater(async () => {
   // });
   // sending reasonable error in jwt token expery

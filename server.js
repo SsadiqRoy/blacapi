@@ -31,18 +31,15 @@ async function connectDB() {
     // sequelize.sync({ alter: true });
     console.log('🎁🎁 blacapi db connected....');
   } catch (error) {
-    // if (error) {
-    // }
-    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
     error.date = new Date().toISOString();
-    console.log(errors);
     error.type = 'creating server';
-    errors.push(error);
-    if (errors.length) {
-      fs.appendFile('./errors/error.log', JSON.stringify(errors), (e) => {
-        if (e) console.log(e);
-      });
-    }
+    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
+      if (e) console.log(e);
+    });
+    // const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
+    // console.log(errors);
+    // errors.push(error);
+
     console.log('DB_CONNECTION🔥', error);
   }
 }
@@ -55,15 +52,15 @@ console.log('about to start app');
 // creating server for the app
 const server = app.listen(process.env.port, process.env.host, async (error) => {
   if (error) {
-    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
     error.date = new Date().toISOString();
     error.type = 'creating server';
-    errors.push(error);
-    if (errors.length) {
-      fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-        if (e) console.log(e);
-      });
-    }
+    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
+      if (e) console.log(e);
+    });
+    // const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
+    // errors.push(error);
+    // if (errors.length) {
+    // }
   }
   console.log('blacapi server started...');
 });
@@ -72,16 +69,16 @@ console.log('app successfully started');
 process.on('unhandledRejection', (error) => {
   console.log(error);
   server.close(async () => {
-    const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
     error.date = new Date().toISOString();
     error.type = 'unhandledRejection';
-    errors.push(error);
 
-    if (errors.length) {
-      fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-        if (e) console.log(e);
-      });
-    }
+    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
+      if (e) console.log(e);
+    });
+    // const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
+    // errors.push(error);
+    // if (errors.length) {
+    // }
 
     process.exit(1);
   });
