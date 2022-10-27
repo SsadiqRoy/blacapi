@@ -1,5 +1,5 @@
 const { create, deleteOne, update, getAll, getOne, search } = require('../middlewares/globalMiddleware');
-const Serie = require('../model/Series');
+const Serie = require('../model/series');
 const Season = require('../model/seasons');
 const Episode = require('../model/episodes');
 const Link = require('../model/links');
