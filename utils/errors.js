@@ -10,7 +10,12 @@ exports.globalError = async (error, req, res, next) => {
 
   if (errors.length) {
     fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-      if (e) console.log(e);
+      if (e) {
+        console.log(e);
+        fs.writeFile('./errors/writeError.json', JSON.stringify(e), (e) => {
+          if (e) console.log(e);
+        });
+      }
     });
   }
   // updater(async () => {
