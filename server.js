@@ -39,7 +39,7 @@ async function connectDB() {
     error.type = 'creating server';
     errors.push(error);
     if (errors.length) {
-      fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+      fs.appendFile('./errors/error.log', JSON.stringify(errors), (e) => {
         if (e) console.log(e);
       });
     }
