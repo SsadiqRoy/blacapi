@@ -9,7 +9,7 @@ exports.globalError = async (error, req, res, next) => {
   errors.push(error);
 
   if (errors.length) {
-    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(errors)}`, 'utf-8', (e) => {
+    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
       if (e) {
         console.log(e);
         fs.writeFile('./errors/writeError.json', JSON.stringify(e), (e) => {
