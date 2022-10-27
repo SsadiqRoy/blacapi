@@ -33,10 +33,11 @@ async function connectDB() {
     console.log(errors);
     error.type = 'creating server';
     errors.push(error);
-    fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-      if (e) console.log(e);
-      process.exit(1);
-    });
+    if (errors.length) {
+      fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+        if (e) console.log(e);
+      });
+    }
     console.log('DB_CONNECTION🔥', error);
   }
 }
@@ -53,9 +54,11 @@ const server = app.listen(process.env.port, process.env.host, async (error) => {
     error.date = new Date().toISOString();
     error.type = 'creating server';
     errors.push(error);
-    fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-      if (e) console.log(e);
-    });
+    if (errors.length) {
+      fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+        if (e) console.log(e);
+      });
+    }
   }
   console.log('blacapi server started...');
 });
@@ -69,9 +72,12 @@ process.on('unhandledRejection', (error) => {
     error.type = 'unhandledRejection';
     errors.push(error);
 
-    fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-      if (e) console.log(e);
-    });
+    if (errors.length) {
+      fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+        if (e) console.log(e);
+      });
+    }
+
     process.exit(1);
   });
 });

@@ -7,9 +7,12 @@ exports.globalError = async (error, req, res, next) => {
   const errors = JSON.parse(await promisify(fs.readFile)(`./errors/error.json`));
   error.date = new Date().toISOString();
   errors.push(error);
-  fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
-    if (e) console.log(e);
-  });
+
+  if (errors.length) {
+    fs.writeFile('./errors/error.json', JSON.stringify(errors), (e) => {
+      if (e) console.log(e);
+    });
+  }
   // updater(async () => {
   // });
   // sending reasonable error in jwt token expery
