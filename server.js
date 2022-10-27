@@ -32,6 +32,7 @@ connectDB();
 // running the app
 const app = require('./app');
 
+console.log('about to start app');
 // creating server for the app
 const server = app.listen(process.env.port, process.env.host, async (error) => {
   if (error) {
@@ -42,6 +43,7 @@ const server = app.listen(process.env.port, process.env.host, async (error) => {
   }
   console.log('blacapi server started...');
 });
+console.log('app successfully started');
 
 process.on('unhandledRejection', (error) => {
   console.log(error);
