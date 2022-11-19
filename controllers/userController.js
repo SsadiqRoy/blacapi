@@ -24,7 +24,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     expiresIn: process.env.loginExp,
   });
   const cookieOption = {
-    expires: new Date(new Date().getTime() + +process.env.loginExp),
+    expires: new Date(Date.now() + +process.env.loginExp),
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
   };
@@ -58,7 +58,7 @@ exports.login = catchAsync(async (req, res, next) => {
   });
   // console.log(process.env.loginExp / 1000000 / 60);
   const cookieOption = {
-    expires: new Date(new Date().getTime() + +process.env.loginExp),
+    expires: new Date(Date.now() + +process.env.loginExp),
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
   };
