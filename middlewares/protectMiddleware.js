@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../model/user');
 const { catchAsync, userRoleLevel } = require('../utils/utils');
+const { LogToFile } = require('../errors/writeError');
 
 //
 /**
@@ -43,6 +44,7 @@ exports.protect = catchAsync(async (req, res, next) => {
  */
 exports.loggedIn = catchAsync(async (req, res, next) => {
   const cookie = req.cookies[process.env.login];
+  new LogToFile(req.cookies);
   if (!cookie) return next();
 
   // decoding the cookie
