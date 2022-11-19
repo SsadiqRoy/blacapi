@@ -10,7 +10,7 @@ class WriteError {
   }
 
   writeToFile() {
-    fs.appendFile('./error/error.log', `\n \n${JSON.stringify(this.error)}`, (e) => {
+    fs.appendFile('./errors/error.log', `\n \n${JSON.stringify(this.error)}`, (e) => {
       if (e) console.log(e);
     });
   }
@@ -22,7 +22,7 @@ class LogToFile {
     this.writeToFile();
   }
   writeToFile() {
-    fs.appendFile('./error/console.log', `\n \n${this.log}`, (e) => {
+    fs.appendFile('./errors/console.log', `\n \n${this.log}`, (e) => {
       if (e) console.log(e);
     });
   }
