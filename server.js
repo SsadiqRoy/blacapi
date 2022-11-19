@@ -12,6 +12,7 @@ process.on('uncaughtException', async (error) => {
       console.log(e);
     }
   });
+
   process.exit(1);
 });
 
@@ -26,45 +27,36 @@ async function connectDB() {
     // sequelize.sync({ alter: true });
     console.log('🎁🎁 blacapi db connected....');
   } catch (error) {
-    error.date = new Date().toISOString();
-    error.type = 'creating server';
-
-    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
-      if (e) console.log(e);
-    });
+    new WriteError(error, {}, 'DB_CONN');
 
     console.log('DB_CONNECTION🔥', error);
   }
 }
 connectDB();
 
+//
+
 // running the app
 const app = require('./app');
+const { WriteError } = require('./errors/writeError');
 
 console.log('about to start app');
 // creating server for the app
 const server = app.listen(process.env.port, process.env.host, async (error) => {
   if (error) {
-    error.date = new Date().toISOString();
-    error.type = 'creating server';
-
-    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
-      if (e) console.log(e);
-    });
+    new WriteError(error, {}, 'CREATING_SERVER');
   }
   console.log('blacapi server started...');
 });
-console.log('app successfully started');
+
+//
+
+//
 
 process.on('unhandledRejection', (error) => {
   console.log(error);
   server.close(async () => {
-    error.date = new Date().toISOString();
-    error.type = 'unhandledRejection';
-
-    fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
-      if (e) console.log(e);
-    });
+    new WriteError(error, {}, 'unhandledRejection');
 
     process.exit(1);
   });

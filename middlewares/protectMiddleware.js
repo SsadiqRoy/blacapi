@@ -42,8 +42,6 @@ exports.protect = catchAsync(async (req, res, next) => {
  * prevents unlogged in users
  */
 exports.loggedIn = catchAsync(async (req, res, next) => {
-  // console.log('first hit');
-  // console.log('👉', req.originalUrl);
   const cookie = req.cookies[process.env.login];
   if (!cookie) return next();
 
