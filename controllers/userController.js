@@ -29,16 +29,17 @@ exports.signup = catchAsync(async (req, res, next) => {
     secure: true,
     httpOnly: true,
     sameSite: 'None',
+    domain: 'blaciris.com',
   };
-  const cookieOption2 = {
-    expires: new Date(Date.now() + +process.env.loginExp),
-    secure: true,
-    httpOnly: true,
-    sameSite: 'None',
-    domain: process.env.cors_allowed,
-  };
+  // const cookieOption2 = {
+  //   expires: new Date(Date.now() + +process.env.loginExp),
+  //   secure: true,
+  //   httpOnly: true,
+  //   sameSite: 'None',
+  //   domain: process.env.cors_allowed,
+  // };
   res.cookie(process.env.login, cookie, cookieOption);
-  res.cookie(process.env.login, cookie, cookieOption2);
+  // res.cookie(process.env.login, cookie, cookieOption2);
 
   res.status(200).json({
     status: 'success',
@@ -72,19 +73,20 @@ exports.login = catchAsync(async (req, res, next) => {
     secure: true,
     httpOnly: true,
     sameSite: 'None',
+    domain: 'blaciris.com',
   };
-  const cookieOption2 = {
-    expires: new Date(Date.now() + +process.env.loginExp),
-    secure: true,
-    httpOnly: true,
-    sameSite: 'None',
-    domain: process.env.cors_allowed,
-  };
+  // const cookieOption2 = {
+  //   expires: new Date(Date.now() + +process.env.loginExp),
+  //   secure: true,
+  //   httpOnly: true,
+  //   sameSite: 'None',
+  //   domain: process.env.cors_allowed,
+  // };
 
-  new LogToFile(cookieOption2);
+  // new LogToFile(cookieOption2);
 
   res.cookie(process.env.login, cookie, cookieOption);
-  res.cookie(process.env.login, cookie, cookieOption2);
+  // res.cookie(process.env.login, cookie, cookieOption2);
 
   user.password = undefined;
   res.status(200).json({
