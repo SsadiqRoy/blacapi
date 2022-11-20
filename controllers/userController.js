@@ -81,7 +81,7 @@ exports.login = catchAsync(async (req, res, next) => {
     domain: process.env.cors_allowed,
   };
 
-  new LogToFile(req.get('host'));
+  new LogToFile(cookieOption2);
 
   res.cookie(process.env.login, cookie, cookieOption);
   res.cookie(process.env.login, cookie, cookieOption2);
