@@ -6,6 +6,7 @@ const User = require('../model/user');
 
 const { deleteOne, getAll, getOne, search, createInstance } = require('../middlewares/globalMiddleware');
 const { catchAsync } = require('../utils/utils');
+const { LogToFile } = require('../errors/writeError');
 // const { catchAsync } = require("../utils/utils");
 
 //
@@ -34,7 +35,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     secure: true,
     httpOnly: true,
     sameSite: 'None',
-    domain: req.get('host'),
+    domain: process.env.cors_allowed,
   };
   res.cookie(process.env.login, cookie, cookieOption);
   res.cookie(process.env.login, cookie, cookieOption2);
@@ -77,8 +78,11 @@ exports.login = catchAsync(async (req, res, next) => {
     secure: true,
     httpOnly: true,
     sameSite: 'None',
-    domain: req.get('host'),
+    domain: process.env.cors_allowed,
   };
+
+  new LogToFile(req.get('host'));
+
   res.cookie(process.env.login, cookie, cookieOption);
   res.cookie(process.env.login, cookie, cookieOption2);
 
@@ -115,7 +119,6 @@ exports.logout = catchAsync(async (req, res, next) => {
 //
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
-  // console.log(req);
   if (req.user) {
     return res.status(200).json({
       status: 'success',
@@ -123,7 +126,11 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
     });
   }
   const cookie = req.cookies[process.env.login];
-  if (!cookie) return next(new Error('login to get access'));
+  if (!cookie)
+    return res.status(200).json({
+      status: 'success',
+      data: req.user,
+    });
 
   // decoding the cookie
   const decode = await promisify(jwt.verify)(cookie, process.env.loginToken);
@@ -133,14 +140,25 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   // console.log({ exp, id, iat });
   const user = await User.findByPk(id);
   // console.log(user);
-  if (!user.active) return next(new Error('your account is not active'));
+  if (!user.active)
+    return res.status(200).json({
+      status: 'success',
+      data: req.user,
+    });
 
   // checking for cookie expery
-  if (Date.now() > exp * 1000) return next(new Error('please log in again'));
+  if (Date.now() > exp * 1000)
+    return res.status(200).json({
+      status: 'success',
+      data: req.user,
+    });
 
   // checking if password has been changed after loggin in and no new cookie
   if (user.passwordChangedAt && new Date(user.passwordChangedAt).getTime() > iat * 1000) {
-    return next(new Error('please log again'));
+    return res.status(200).json({
+      status: 'success',
+      data: req.user,
+    });
   }
 
   res.status(200).json({
