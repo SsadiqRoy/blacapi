@@ -27,6 +27,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     expires: new Date(Date.now() + +process.env.loginExp),
     secure: true,
     httpOnly: true,
+    sameSite: 'None',
   };
   res.cookie(process.env.login, cookie, cookieOption);
 
@@ -61,6 +62,7 @@ exports.login = catchAsync(async (req, res, next) => {
     expires: new Date(Date.now() + +process.env.loginExp),
     secure: true,
     httpOnly: true,
+    sameSite: 'None',
   };
   res.cookie(process.env.login, cookie, cookieOption);
 
