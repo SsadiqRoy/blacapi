@@ -5,6 +5,7 @@ class WriteError {
     this.error = error;
     this.error.date = new Date().toISOString();
     this.error.url = req.originalUrl;
+    this.error.host = req.get('host');
     this.error.type = type;
     this.writeToFile();
   }
