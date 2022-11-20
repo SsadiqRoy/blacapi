@@ -8,10 +8,12 @@ const router = Router();
 //
 
 const { login, logout, signup } = controller;
-router.route('/log').post(signup).patch(login);
+// router.route('/log').post(signup).patch(login);
+router.post('/login', login);
+router.post('/signup', signup);
 
 router.use(protect);
-router.get('/log', logout);
+router.get('/logout', logout);
 router.get('/loggedin', controller.isLoggedIn);
 
 const { oneUser, updateUser, deleteUser } = controller;
