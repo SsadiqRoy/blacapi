@@ -29,7 +29,15 @@ exports.signup = catchAsync(async (req, res, next) => {
     httpOnly: true,
     sameSite: 'None',
   };
+  const cookieOption2 = {
+    expires: new Date(Date.now() + +process.env.loginExp),
+    secure: true,
+    httpOnly: true,
+    sameSite: 'None',
+    domain: req.get('host'),
+  };
   res.cookie(process.env.login, cookie, cookieOption);
+  res.cookie(process.env.login, cookie, cookieOption2);
 
   res.status(200).json({
     status: 'success',
@@ -64,7 +72,15 @@ exports.login = catchAsync(async (req, res, next) => {
     httpOnly: true,
     sameSite: 'None',
   };
+  const cookieOption2 = {
+    expires: new Date(Date.now() + +process.env.loginExp),
+    secure: true,
+    httpOnly: true,
+    sameSite: 'None',
+    domain: req.get('host'),
+  };
   res.cookie(process.env.login, cookie, cookieOption);
+  res.cookie(process.env.login, cookie, cookieOption2);
 
   user.password = undefined;
   res.status(200).json({
