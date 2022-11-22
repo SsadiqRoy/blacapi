@@ -14,7 +14,7 @@ class ApiFilter {
   }
 
   filter() {
-    const excluded = ['page', 'limit', 'order', 'length', 'total'];
+    const excluded = ['page', 'limit', 'order', 'length', 'total', 'fields'];
     const newq = { ...this.oldq };
     excluded.forEach((e) => {
       if (newq[e]) delete newq[e];
@@ -44,6 +44,11 @@ class ApiFilter {
       });
       this.query.order = list;
     }
+  }
+
+  fields() {
+    if (!this.oldq.fields) return;
+    this.query.attributes = this.oldq.fields.split(',');
   }
 
   // working with date fields
@@ -145,6 +150,7 @@ class ApiFilter {
 
   execute() {
     this.filter();
+    this.fields();
     this.sort();
     this.pagination();
     this.dateQueries();

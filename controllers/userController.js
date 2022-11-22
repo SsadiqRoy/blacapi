@@ -6,8 +6,6 @@ const User = require('../model/user');
 
 const { deleteOne, getAll, getOne, search, createInstance } = require('../middlewares/globalMiddleware');
 const { catchAsync } = require('../utils/utils');
-const { LogToFile } = require('../errors/writeError');
-// const { catchAsync } = require("../utils/utils");
 
 //
 
@@ -29,23 +27,15 @@ exports.signup = catchAsync(async (req, res, next) => {
     secure: true,
     httpOnly: true,
     sameSite: 'None',
-    domain: 'blaciris.com',
+    domain: process.env.cookie_domain,
   };
-  // const cookieOption2 = {
-  //   expires: new Date(Date.now() + +process.env.loginExp),
-  //   secure: true,
-  //   httpOnly: true,
-  //   sameSite: 'None',
-  //   domain: process.env.cors_allowed,
-  // };
+
   res.cookie(process.env.login, cookie, cookieOption);
-  // res.cookie(process.env.login, cookie, cookieOption2);
 
   res.status(200).json({
     status: 'success',
     data: user,
   });
-  // console.log(res.cookie);
 });
 
 //
@@ -73,7 +63,7 @@ exports.login = catchAsync(async (req, res, next) => {
     secure: true,
     httpOnly: true,
     sameSite: 'None',
-    domain: 'blaciris.com',
+    domain: process.env.cookie_domain,
   };
   // const cookieOption2 = {
   //   expires: new Date(Date.now() + +process.env.loginExp),
@@ -107,8 +97,10 @@ exports.logout = catchAsync(async (req, res, next) => {
 
   const cookieOption = {
     expires: new Date(new Date().getTime() + 2000),
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     httpOnly: true,
+    sameSite: 'None',
+    domain: process.env.cookie_domain,
   };
   res.cookie(process.env.login, cookie, cookieOption);
 
