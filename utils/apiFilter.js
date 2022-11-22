@@ -76,6 +76,18 @@ class ApiFilter {
 
     this.query.where.createdAt = obj;
   }
+  _updatedAt() {
+    if (!this.query.where.updatedAt) return;
+    // format: updatedAt=gte,02/02/2022
+    const updatedAt = this.query.where.updatedAt;
+    // splitting updatedAt value
+    const queries = updatedAt.split(',');
+    // redesigning updatedAt into object
+    const obj = {};
+    obj[Op[queries[0]]] = queries[1];
+
+    this.query.where.updatedAt = obj;
+  }
   _passwordChangedAt() {
     if (!this.query.where.passwordChangedAt) return;
     // format: passwordChangedAt=gte,02/02/2022
@@ -143,6 +155,7 @@ class ApiFilter {
   dateQueries() {
     this._releasedDate();
     this._createdAt();
+    this._updatedAt();
     this._passwordChangedAt();
     this._rating();
     this._date();
