@@ -10,12 +10,11 @@ const { catchAsync } = require('../utils/utils');
 exports.createMovie = create(Movie);
 exports.updateMovie = update(Movie);
 exports.deleteMovie = deleteOne(Movie);
-exports.getAll = getAll(Movie);
-exports.getOne = getOne(Movie, ['User', 'Links'], [['Links', 'resolution', 'ASC']]);
-exports.search = search(Movie, [
+exports.getAll = getAll(Movie, [
   ['title', 0],
   ['country', 0],
   ['companies', 1],
   ['charactors', 1],
   ['keywords', 1],
 ]);
+exports.getOne = getOne(Movie, ['User', 'Links'], [['Links', 'resolution', 'ASC']]);

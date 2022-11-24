@@ -195,10 +195,5 @@ exports.changePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteUser = deleteOne(User);
-exports.allUsers = getAll(User);
+exports.allUsers = getAll(User, [['name', 0]]);
 exports.oneUser = getOne(User);
-
-exports.search = search(User, [
-  ['name', 0],
-  // ["email", 0],
-]);

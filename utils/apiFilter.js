@@ -1,20 +1,23 @@
 const { Op } = require('sequelize');
 
+const { searchMatch } = require('./functions');
+
 class ApiFilter {
   /**
    * Converts request query into filtering, pagination and sorting.
    * Call new ApiFilter(query).query to get the built query.
    * @param {Object} query request query object
    */
-  constructor(query) {
+  constructor(query, searchFields) {
     this.query = {};
     this.oldq = query;
     this.page;
+    this.searchFields = searchFields;
     this.execute();
   }
 
   filter() {
-    const excluded = ['page', 'limit', 'order', 'length', 'total', 'fields'];
+    const excluded = ['page', 'limit', 'order', 'length', 'total', 'fields', 'range', 'text', 'consumed'];
     const newq = { ...this.oldq };
     excluded.forEach((e) => {
       if (newq[e]) delete newq[e];
@@ -49,6 +52,29 @@ class ApiFilter {
   fields() {
     if (!this.oldq.fields) return;
     this.query.attributes = this.oldq.fields.split(',');
+  }
+  range() {
+    if (!this.oldq.range) return;
+    // format: range=feildname,start,end
+    // format: range=releasedDate,01/01/2022,01/01/2023
+    const range = this.query.where.range;
+    // splitting range value
+    const queries = range.split(',');
+    // redesigning range into object
+    const obj = {};
+    obj[Op.between] = [queries[1], queries[2]];
+
+    this.query.where[queries[0]] = obj;
+  }
+
+  search() {
+    if (!this.oldq.text) return;
+    // const allText = this.oldq.text.split('-');
+    const text = this.oldq.text.split('-').join(' ').toLowerCase();
+
+    // building search option on fields
+    let queryFields = searchMatch(this.searchFields, text);
+    this.query.where[Op.or] = queryFields;
   }
 
   // working with date fields
@@ -167,6 +193,8 @@ class ApiFilter {
     this.sort();
     this.pagination();
     this.dateQueries();
+    this.range();
+    this.search();
     //
     this._withIn();
     this._withNotIn();

@@ -53,30 +53,46 @@ exports.create = (Model) =>
 //
 /**
  * selects all documents of a table
+ *
+ * search for matching data in a table. More fields are added if more fields are to be considered in the search
  * @param {Object} Model sequelize schema
- * @returns null - sends response
+ * @param {[Array]} fields [ [colums name, string(0) | array(1)] ] - Array of arrays
+ * @returns null  - sends response
+ *
+ * each sub array in the array of fields should contain the name of a column and a number (0 or 1) indicating whether the field is String or Array respectively
  */
-exports.getAll = (Model) =>
+exports.getAll = (Model, fields) =>
   catchAsync(async (req, res, next) => {
-    const api = new ApiFilter(req.query);
+    const oldQuery = { ...req.query };
+
+    const api = new ApiFilter(req.query, fields);
     const query = api.query;
 
-    console.log('👉', query);
     const data = await Model.findAll(query);
     const total = await Model.count({ where: query.where });
 
     const meta = {
+      total,
       length: data.length,
+      consumed: (api.page - 1) * query.limit + data.length,
       page: api.page,
       limit: query.limit,
-      total,
-      text: req.query.text,
+      text: oldQuery.text,
     };
+    meta.next = meta.total - meta.consumed;
+
+    // adding suggestions when less content is found in a search
+    let suggestion = [];
+    if (meta.page < 2 && meta.length < meta.limit) {
+      const exclude = data.map((data) => data.id);
+      suggestion = await suggestions(Model, api, exclude);
+    }
 
     res.status(200).json({
       status: 'success',
       meta,
       data,
+      suggestions: suggestion,
     });
   });
 
@@ -134,75 +150,44 @@ exports.getOne = (Model, include = undefined, order = undefined) =>
     });
   });
 
-//
+/*
+
+
+
+
+
+
+
+
+
+*/
+
 /**
- * search for matching data in a table. More fields are added if more fields are to be considered in the search
- * @param {Object} Model sequlize schema
- * @param {[Array]} fields [ [colums name, string(0) | array(1)] ] - Array of arrays
- * @returns null  - sends response
- * each sub array in the array of fields should contain the name of a column and a number (0 or 1) indicating whether the field is String or Array respectively
+ * Suggest more documents when the first page query does not contain enought data in a search
+ * @param {Object} Model sequelize Schema
+ * @param {Class} filter queryFilter instance
+ * @param {Array} exclude ids to exclude when making query
+ * @returns Array = query documents
  */
-exports.search = (Model, fields) =>
-  catchAsync(async (req, res, next) => {
-    const oldQuery = { ...req.query };
-    const allText = req.query.text.split('-');
-    const text = req.query.text.split('-').join(' ').toLowerCase();
+async function suggestions(Model, filter, exclude) {
+  if (!filter.oldq.text) return;
+  const query = filter.query;
+  const texts = filter.oldq.text.split('-');
 
-    // building search option on fields
-    let queryFields = searchMatch(fields, text);
+  // creating a search query for each word
+  let allFields = [];
+  texts.forEach((t) => {
+    const searchFields = searchMatch(filter.searchFields, t);
 
-    // creating queries
-    const api = new ApiFilter(req.query);
-    const query = api.query;
-    query.where = { [Op.or]: queryFields };
-
-    console.log('👉', query.where);
-
-    // making queries
-    const data = await Model.findAll(query);
-    const total = await Model.count({ where: query.where });
-
-    const meta = {
-      length: data.length,
-      page: api.page,
-      limit: query.limit,
-      total,
-      text,
-    };
-
-    //
-
-    //
-    // ============== REMAKING THE  QUERY AGAIN WIHT THE WORDS SPLIT TO INDIVIDUAL
-    // id of already found items to exclued
-    const notInIds = data.map((data) => data.id);
-    // desingin an new query
-    const newApi = new ApiFilter(oldQuery);
-    const newQuery = newApi.query;
-    // creating a search query for each word
-    let newQueryFieldArr = [];
-    allText.forEach((t) => {
-      const newQueryFields = searchMatch(fields, t);
-
-      console.log('👉', newQueryFields[3]);
-      newQueryFieldArr = [...newQueryFieldArr, ...newQueryFields];
-    });
-    // associating the new where clause of the query
-    newQuery.where = { [Op.or]: newQueryFieldArr };
-    // adding excluded id to the query
-    newQuery.where.id = { [Op.notIn]: notInIds };
-    const newData = await Model.findAll(newQuery);
-
-    console.log('👉', newQuery.where);
-
-    //
-
-    //
-
-    res.status(200).json({
-      status: 'success',
-      meta,
-      data,
-      suggestion: newData,
-    });
+    allFields = [...allFields, ...searchFields];
   });
+  // associating the new where clause of the query
+  query.offset = 0;
+  query.limit = 20;
+  query.where[Op.or] = allFields;
+  // adding excluded id to the query
+  query.where.id = { [Op.notIn]: exclude };
+  const data = await Model.findAll(query);
+
+  return data;
+}

@@ -8,7 +8,6 @@ const router = Router();
 //
 
 const { login, logout, signup } = controller;
-// router.route('/log').post(signup).patch(login);
 router.post('/login', login);
 router.post('/signup', signup);
 
@@ -22,7 +21,6 @@ router.patch('/changepassword/:id', controller.changePassword);
 
 router.use(aboveEployee); // only position above employee are allowed
 router.route('/').get(controller.allUsers);
-router.get('/search', controller.search);
 
 // adding or removing an employee an employee
 router.patch('/employee/:id', updateUser);
