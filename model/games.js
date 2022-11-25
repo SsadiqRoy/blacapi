@@ -18,7 +18,7 @@ const Game = sequelize.define('Game', {
   portrait: DataTypes.STRING(500),
   landscape: DataTypes.STRING(500),
   description: DataTypes.STRING,
-  about: DataTypes.STRING(2234),
+  about: DataTypes.STRING(9999),
   tags: DataTypes.JSON,
   keywords: DataTypes.JSON,
   company: DataTypes.STRING,

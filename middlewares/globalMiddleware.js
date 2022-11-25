@@ -13,8 +13,8 @@ let nOfInstance = 0;
  */
 exports.createInstance = async (Model, body) => {
   try {
-    console.log('🔥', Model);
-    console.log('🔥', body);
+    // console.log('🔥', Model);
+    // console.log('🔥', body);
     // creating an id
     body.id = createId();
     // creating the data
@@ -90,7 +90,7 @@ exports.getAll = (Model, fields) =>
 
     res.status(200).json({
       status: 'success',
-      meta,
+      meta: { ...oldQuery, ...meta },
       data,
       suggestions: suggestion,
     });

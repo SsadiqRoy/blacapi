@@ -17,7 +17,7 @@ class ApiFilter {
   }
 
   filter() {
-    const excluded = ['page', 'limit', 'order', 'length', 'total', 'fields', 'range', 'text', 'consumed'];
+    const excluded = ['page', 'limit', 'order', 'length', 'total', 'fields', 'range', 'text', 'consumed', 'next'];
     const newq = { ...this.oldq };
     excluded.forEach((e) => {
       if (newq[e]) delete newq[e];
@@ -28,7 +28,7 @@ class ApiFilter {
   pagination() {
     const { page, limit } = this.oldq;
     const p = +page || 1;
-    const l = +limit || 50;
+    const l = +limit || 30;
     this.page = p;
     this.query.offset = p * l - l;
     this.query.limit = l;
@@ -37,9 +37,10 @@ class ApiFilter {
   sort() {
     if (this.oldq.order) {
       const list = [];
+      // format: order=title,asc,realeaseDate,asc
       const values = this.oldq.order.split(',');
       values.forEach((value, i) => {
-        if (i % 2 !== 0) return;
+        if (i % 2 !== 0) return; // checking for even numbers only (fields)
         const column = value;
         const order = values[i + 1] ? values[i + 1].toUpperCase() : 'ASC';
 
@@ -53,11 +54,12 @@ class ApiFilter {
     if (!this.oldq.fields) return;
     this.query.attributes = this.oldq.fields.split(',');
   }
+
   range() {
     if (!this.oldq.range) return;
     // format: range=feildname,start,end
     // format: range=releasedDate,01/01/2022,01/01/2023
-    const range = this.query.where.range;
+    const range = this.oldq.range;
     // splitting range value
     const queries = range.split(',');
     // redesigning range into object

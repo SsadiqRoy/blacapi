@@ -44,8 +44,8 @@ exports.protect = catchAsync(async (req, res, next) => {
  */
 exports.loggedIn = catchAsync(async (req, res, next) => {
   const cookie = req.cookies[process.env.login];
-  req.cookies.host = req.get('host');
-  new LogToFile(req.cookies);
+  // req.cookies.host = req.get('host');
+  // new LogToFile(req.cookies);
   if (!cookie) return next();
 
   // decoding the cookie
