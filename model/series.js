@@ -73,22 +73,4 @@ Season.belongsTo(Serie, {
 
 // ================= HOOKS ==============
 
-Serie.afterFind((serie) => {
-  // if (typeof serie.length == 'number') {
-  //   serie.forEach((m) => {
-  //     m.tags = JSON.parse(m.tags);
-  //     m.companies = JSON.parse(m.companies);
-  //     m.charactors = JSON.parse(m.charactors);
-  //     m.actors = JSON.parse(m.actors);
-  //     m.directors = JSON.parse(m.directors);
-  //   });
-  //   return;
-  // }
-  // serie.tags = JSON.parse(serie.tags);
-  // serie.companies = JSON.parse(serie.companies);
-  // serie.charactors = JSON.parse(serie.charactors);
-  // serie.actors = JSON.parse(serie.actors);
-  // serie.directors = JSON.parse(serie.directors);
-});
-
 module.exports = Serie;

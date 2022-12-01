@@ -2,8 +2,6 @@ const { create, deleteOne, update, getAll, getOne } = require('../middlewares/gl
 const Episode = require('../model/episodes');
 const Link = require('../model/links');
 
-// const { catchAsync } = require("../utils/utils");
-
 //
 
 exports.addEpisode = create(Episode);

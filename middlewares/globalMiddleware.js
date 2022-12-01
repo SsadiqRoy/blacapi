@@ -123,11 +123,12 @@ exports.update = (Model) =>
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const data = await Model.findByPk(req.params.id);
-    await Model.destroy({ where: { id: req.params.id } });
+    const meta = await Model.destroy({ where: { id: req.params.id } });
 
     res.status(200).json({
       status: 'success',
-      meta: data,
+      meta,
+      data,
     });
   });
 

@@ -1,10 +1,8 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const sequelize = require("../db");
-// const Notification = require("./notifications");
-// const { createInstance } = require("../middlewares/globalMiddleware");
+const sequelize = require('../db');
 
-const Suggestion = sequelize.define("Suggestion", {
+const Suggestion = sequelize.define('Suggestion', {
   id: {
     type: DataTypes.STRING(50),
     allowNull: false,
@@ -16,7 +14,7 @@ const Suggestion = sequelize.define("Suggestion", {
   message: DataTypes.STRING,
   on: {
     type: DataTypes.ENUM,
-    values: ["movie", "game", "serie"],
+    values: ['movie', 'game', 'serie'],
   },
 });
 

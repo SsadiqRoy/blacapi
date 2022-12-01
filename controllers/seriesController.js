@@ -5,8 +5,6 @@ const Episode = require('../model/episodes');
 
 //
 
-//
-
 exports.addSerie = create(Serie);
 exports.updateSerie = update(Serie);
 exports.deleteSerie = deleteOne(Serie);

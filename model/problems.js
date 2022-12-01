@@ -1,15 +1,11 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const sequelize = require("../db");
-const Movie = require("./movies");
-const Game = require("./games");
-const Serie = require("./series");
-// const Notification = require("./notifications");
+const sequelize = require('../db');
+const Movie = require('./movies');
+const Game = require('./games');
+const Serie = require('./series');
 
-// const { createInstance } = require("../middlewares/globalMiddleware");
-// const { createId } = require("../utils/utils");
-
-const Problem = sequelize.define("Problem", {
+const Problem = sequelize.define('Problem', {
   id: {
     type: DataTypes.STRING(50),
     allowNull: false,
@@ -21,7 +17,7 @@ const Problem = sequelize.define("Problem", {
   message: DataTypes.STRING,
   on: {
     type: DataTypes.ENUM,
-    values: ["movie", "game", "serie", "other"],
+    values: ['movie', 'game', 'serie', 'other'],
   },
 });
 
@@ -34,44 +30,44 @@ const Problem = sequelize.define("Problem", {
 
 // ========================= association between movie and Problem
 Movie.hasMany(Problem, {
-  sourceKey: "id",
-  foreignKey: "movie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'movie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 Problem.belongsTo(Movie, {
-  targetKey: "id",
-  foreignKey: "movie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'movie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 
 // ========================= association between game and Problem
 Game.hasMany(Problem, {
-  sourceKey: "id",
-  foreignKey: "game",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'game',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 Problem.belongsTo(Game, {
-  targetKey: "id",
-  foreignKey: "game",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'game',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 
 // ========================= association between series and Problem
 Serie.hasMany(Problem, {
-  sourceKey: "id",
-  foreignKey: "serie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  sourceKey: 'id',
+  foreignKey: 'serie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 Problem.belongsTo(Serie, {
-  targetKey: "id",
-  foreignKey: "serie",
-  onDelete: "CASCADE",
-  onUpdate: "NO ACTION",
+  targetKey: 'id',
+  foreignKey: 'serie',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION',
 });
 
 //

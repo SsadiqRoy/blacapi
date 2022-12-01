@@ -1,8 +1,5 @@
 const { create, deleteOne, update, getAll, getOne, search } = require('../middlewares/globalMiddleware');
 const Game = require('../model/games');
-// const { catchAsync } = require("../utils/utils");
-
-//
 
 //
 

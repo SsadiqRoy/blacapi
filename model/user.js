@@ -59,7 +59,6 @@ User.afterCreate((user) => {
 User.beforeValidate(async (user) => {
   if (user.password) {
     user.password = await bcrypt.hash(user.password, 12);
-    // console.log(user.password);
   }
 });
 

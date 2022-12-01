@@ -63,18 +63,4 @@ Link.belongsTo(Game, {
 
 // ================= HOOKS ==============
 
-Game.afterFind((game) => {
-  // console.log(game);
-  // console.log("🔥", typeof game.length);
-  // if (typeof game.length == 'number') {
-  //   game.forEach((g) => {
-  //     g.tags = JSON.parse(g.tags);
-  //     g.companies = JSON.parse(g.companies);
-  //   });
-  //   return;
-  // }
-  // game.tags = JSON.parse(game.tags);
-  // game.companies = JSON.parse(game.companies);
-});
-
 module.exports = Game;

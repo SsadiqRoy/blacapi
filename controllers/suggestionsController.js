@@ -1,13 +1,5 @@
-const {
-  create,
-  deleteOne,
-  update,
-  getAll,
-  getOne,
-} = require("../middlewares/globalMiddleware");
-const Suggestion = require("../model/suggestions");
-
-//
+const { create, deleteOne, update, getAll, getOne } = require('../middlewares/globalMiddleware');
+const Suggestion = require('../model/suggestions');
 
 //
 

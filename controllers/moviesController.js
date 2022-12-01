@@ -1,9 +1,6 @@
 const Movie = require('../model/movies');
 
 const { create, deleteOne, update, getAll, getOne, search } = require('../middlewares/globalMiddleware');
-const { catchAsync } = require('../utils/utils');
-
-//
 
 //
 

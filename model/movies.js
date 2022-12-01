@@ -62,22 +62,4 @@ Link.belongsTo(Movie, {
 
 // ================= HOOKS ==============
 
-Movie.afterFind((movie) => {
-  // if (typeof movie.length == 'number') {
-  // movie.forEach((m) => {
-  // m.tags = JSON.parse(m.tags);
-  // m.companies = JSON.parse(m.companies);
-  // m.charactors = JSON.parse(m.charactors);
-  // m.actors = JSON.parse(m.actors);
-  // m.directors = JSON.parse(m.directors);
-  // });
-  // return;
-  // }
-  // movie.tags = JSON.parse(movie.tags);
-  // movie.companies = JSON.parse(movie.companies);
-  // movie.charactors = JSON.parse(movie.charactors);
-  // movie.actors = JSON.parse(movie.actors);
-  // movie.directors = JSON.parse(movie.directors);
-});
-
 module.exports = Movie;

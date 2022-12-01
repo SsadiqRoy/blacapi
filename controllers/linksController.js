@@ -1,4 +1,3 @@
-const { createInstance } = require('../middlewares/globalMiddleware');
 const Link = require('../model/links');
 const { catchAsync } = require('../utils/utils');
 const global = require('../middlewares/globalMiddleware');
@@ -11,64 +10,8 @@ exports.updateLink = global.update(Link);
 exports.deleteLink = global.deleteOne(Link);
 exports.oneLink = global.getOne(Link);
 exports.allLinks = global.getAll(Link);
-// catchAsync(async (req, res, next) => {
-//   const link = await createInstance(Link, req.body);
-
-//   res.status(200).json({
-//     status: "success",
-//     data: link,
-//   });
-// });
 
 //
-
-// exports.updateLink = catchAsync(async (req, res, next) => {
-//   const link = await Link.update(req.body, { where: { id: req.params.id } });
-//   const data = await Link.findByPk(req.params.id);
-
-//   res.status(200).json({
-//     status: "success",
-//     meta: link,
-//     data,
-//   });
-// });
-
-//
-
-// exports.deleteLink = catchAsync(async (req, res, next) => {
-//   const link = await Link.destroy({ where: { id: req.params.id } });
-
-//   res.status(200).json({
-//     status: 'success',
-//     data: link,
-//   });
-// });
-
-//
-
-// exports.allLinks = catchAsync(async (req, res, next) => {
-//   const data = await Link.findAll();
-
-//   res.status(200).json({
-//     status: 'success',
-//     length: data.length,
-//     data,
-//   });
-// });
-
-//
-
-// exports.oneLink = catchAsync(async (req, res, next) => {
-//   const link = await Link.findByPk(req.params.id, { include: 'Movie' });
-
-//   res.status(200).json({
-//     status: 'success',
-//     data: link,
-//   });
-// });
-
-//
-
 exports.productLinks = catchAsync(async (req, res, next) => {
   let product = req.params.product;
   let links;

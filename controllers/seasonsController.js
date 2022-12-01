@@ -3,8 +3,6 @@ const Season = require('../model/seasons');
 const Episode = require('../model/episodes');
 const Link = require('../model/links');
 
-// const { catchAsync } = require("../utils/utils");
-
 //
 
 exports.addSeason = create(Season);
