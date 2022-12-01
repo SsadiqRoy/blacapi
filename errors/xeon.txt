@@ -1,0 +1,32 @@
+NODE_ENV=development
+host='localhost'
+port=2000
+
+# platform='local'
+# runon='beta'
+
+local variables
+db_host='127.0.0.1'
+db_port=3306
+db_name='blaciris'
+db_user='root'
+db_password='1234'
+db_dialect='mariadb'
+
+cors_allowed=http://localhost:2500
+
+# db_host='blaciris.com'
+# db_port=3306
+# db_name='blaciris_master'
+# db_user='blaciris'
+# db_password='@LuckyNation40'
+# db_dialect='mysql'
+
+# cors_allowed=https://blaciris.com
+
+
+loginToken='$This-is-a-very-preciouse-token-for-login-in@blaciris'
+loginExp=432000000
+logoutExp=2S
+login='blaciris_user'
+cookie_domain=localhost
