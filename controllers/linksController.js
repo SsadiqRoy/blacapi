@@ -1,84 +1,89 @@
-const { createInstance } = require("../middlewares/globalMiddleware");
-const Link = require("../model/links");
-const { catchAsync } = require("../utils/utils");
-
+const { createInstance } = require('../middlewares/globalMiddleware');
+const Link = require('../model/links');
+const { catchAsync } = require('../utils/utils');
+const global = require('../middlewares/globalMiddleware');
 //
 
 //
 
-exports.createLink = catchAsync(async (req, res, next) => {
-  const link = await createInstance(Link, req.body);
+exports.createLink = global.create(Link);
+exports.updateLink = global.update(Link);
+exports.deleteLink = global.deleteOne(Link);
+exports.oneLink = global.getOne(Link);
+exports.allLinks = global.getAll(Link);
+// catchAsync(async (req, res, next) => {
+//   const link = await createInstance(Link, req.body);
 
-  res.status(200).json({
-    status: "success",
-    data: link,
-  });
-});
-
-//
-
-exports.updateLink = catchAsync(async (req, res, next) => {
-  const link = await Link.update(req.body, { where: { id: req.params.id } });
-  const data = await Link.findByPk(req.params.id);
-
-  res.status(200).json({
-    status: "success",
-    meta: link,
-    data,
-  });
-});
+//   res.status(200).json({
+//     status: "success",
+//     data: link,
+//   });
+// });
 
 //
 
-exports.deleteLink = catchAsync(async (req, res, next) => {
-  const link = await Link.destroy({ where: { id: req.params.id } });
+// exports.updateLink = catchAsync(async (req, res, next) => {
+//   const link = await Link.update(req.body, { where: { id: req.params.id } });
+//   const data = await Link.findByPk(req.params.id);
 
-  res.status(200).json({
-    status: "success",
-    data: link,
-  });
-});
-
-//
-
-exports.allLinks = catchAsync(async (req, res, next) => {
-  const data = await Link.findAll();
-
-  res.status(200).json({
-    status: "success",
-    length: data.length,
-    data,
-  });
-});
+//   res.status(200).json({
+//     status: "success",
+//     meta: link,
+//     data,
+//   });
+// });
 
 //
 
-exports.oneLink = catchAsync(async (req, res, next) => {
-  const link = await Link.findByPk(req.params.id, { include: "Movie" });
+// exports.deleteLink = catchAsync(async (req, res, next) => {
+//   const link = await Link.destroy({ where: { id: req.params.id } });
 
-  res.status(200).json({
-    status: "success",
-    data: link,
-  });
-});
+//   res.status(200).json({
+//     status: 'success',
+//     data: link,
+//   });
+// });
+
+//
+
+// exports.allLinks = catchAsync(async (req, res, next) => {
+//   const data = await Link.findAll();
+
+//   res.status(200).json({
+//     status: 'success',
+//     length: data.length,
+//     data,
+//   });
+// });
+
+//
+
+// exports.oneLink = catchAsync(async (req, res, next) => {
+//   const link = await Link.findByPk(req.params.id, { include: 'Movie' });
+
+//   res.status(200).json({
+//     status: 'success',
+//     data: link,
+//   });
+// });
 
 //
 
 exports.productLinks = catchAsync(async (req, res, next) => {
   let product = req.params.product;
   let links;
-  if (product === "movie") {
+  if (product === 'movie') {
     links = await Link.findAll({ where: { movie: req.params.id } });
   }
-  if (product === "episode") {
+  if (product === 'episode') {
     links = await Link.findAll({ where: { episode: req.params.id } });
   }
-  if (product === "game") {
+  if (product === 'game') {
     links = await Link.findAll({ where: { game: req.params.id } });
   }
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     length: links.length,
     data: links,
   });

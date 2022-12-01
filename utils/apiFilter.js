@@ -28,7 +28,7 @@ class ApiFilter {
   pagination() {
     const { page, limit } = this.oldq;
     const p = +page || 1;
-    const l = +limit || 30;
+    const l = +limit || 10;
     this.page = p;
     this.query.offset = p * l - l;
     this.query.limit = l;
@@ -169,9 +169,10 @@ class ApiFilter {
   // working witha array fields
   _withIn() {
     if (!this.query.where.in) return;
-    // format: notIn=id,first_id,second_id,third_id
-    const notin = this.query.where.in;
-    const arr = notin.split(',');
+    // format: In=id,first_id,second_id,third_id
+    // format: In=field,first_item,second_item,third_item
+    const In = this.query.where.in;
+    const arr = In.split(',');
     const field = arr.shift();
     const obj = {};
     obj[Op.in] = arr;

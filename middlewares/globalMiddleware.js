@@ -189,5 +189,5 @@ async function suggestions(Model, filter, exclude) {
   query.where.id = { [Op.notIn]: exclude };
   const data = await Model.findAll(query);
 
-  return data;
+  return data.splice(0, 12);
 }

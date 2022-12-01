@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/user');
 const { catchAsync, userRoleLevel } = require('../utils/utils');
 const { LogToFile } = require('../errors/writeError');
+const AppError = require('../utils/appError');
 
 //
 /**
@@ -13,7 +14,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // console.log(req);
   if (req.user) return next();
   const cookie = req.cookies[process.env.login];
-  if (!cookie) return next(new Error('login to get access'));
+  if (!cookie) return next(new AppError('login to get access', 406));
 
   // decoding the cookie
   const decode = await promisify(jwt.verify)(cookie, process.env.loginToken);
@@ -23,14 +24,14 @@ exports.protect = catchAsync(async (req, res, next) => {
   console.log({ exp, id, iat });
   const user = await User.findByPk(id);
   // console.log(user);
-  if (!user.active) return next(new Error('your account is not active'));
+  if (!user.active) return next(new AppError('your account is not active', 406));
 
   // checking for cookie expery
-  if (Date.now() > exp * 1000) return next(new Error('please log in again'));
+  if (Date.now() > exp * 1000) return next(new AppError('please log in again', 406));
 
   // checking if password has been changed after loggin in and no new cookie
   if (user.passwordChangedAt && new Date(user.passwordChangedAt).getTime() > iat * 1000) {
-    return next(new Error('please log again'));
+    return next(new AppError('please log again', 406));
   }
 
   req.user = user;
@@ -77,7 +78,7 @@ exports.loggedIn = catchAsync(async (req, res, next) => {
  */
 exports.aboveUser = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 2) return next(new Error('you do not have access to perform this action'));
+  if (userRoleLevel(role) < 2) return next(new AppError('you do not have access to perform this action', 406));
 
   next();
 });
@@ -87,7 +88,7 @@ exports.aboveUser = catchAsync(async (req, res, next) => {
  */
 exports.aboveEployee = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 3) return next(new Error('you do not have access to perform this action'));
+  if (userRoleLevel(role) < 3) return next(new AppError('you do not have access to perform this action', 406));
 
   next();
 });
@@ -97,7 +98,7 @@ exports.aboveEployee = catchAsync(async (req, res, next) => {
  */
 exports.aboveAdmin = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 4) return next(new Error('you do not have access to perform this action'));
+  if (userRoleLevel(role) < 4) return next(new AppError('you do not have access to perform this action', 406));
 
   next();
 });
@@ -107,7 +108,7 @@ exports.aboveAdmin = catchAsync(async (req, res, next) => {
  */
 exports.aboveSuperAdmin = catchAsync(async (req, res, next) => {
   const { role } = req.user;
-  if (userRoleLevel(role) < 5) return next(new Error('you do not have access to perform this action'));
+  if (userRoleLevel(role) < 5) return next(new AppError('you do not have access to perform this action', 406));
 
   next();
 });

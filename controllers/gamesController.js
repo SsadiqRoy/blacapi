@@ -14,4 +14,4 @@ exports.allGames = getAll(Game, [
   ['tags', 1],
   ['companies', 1],
 ]);
-exports.oneGame = getOne(Game, ['User', 'Links'], [['Links', 'part', 'ASC']]);
+exports.oneGame = getOne(Game, ['Links'], [['Links', 'part', 'ASC']]);

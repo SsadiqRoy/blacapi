@@ -7,6 +7,7 @@ const router = Router();
 
 //
 
+router.get('/one/:id', controller.oneSeason);
 router.use(protect, aboveUser);
 router.get('/', controller.allSeasons);
 router.post('/create', controller.addSeason);

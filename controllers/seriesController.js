@@ -2,7 +2,6 @@ const { create, deleteOne, update, getAll, getOne, search } = require('../middle
 const Serie = require('../model/series');
 const Season = require('../model/seasons');
 const Episode = require('../model/episodes');
-const Link = require('../model/links');
 
 //
 
@@ -19,8 +18,5 @@ exports.allSeries = getAll(Serie, [
   ['companies', 1],
   ['charactors', 1],
 ]);
-exports.oneSerie = getOne(
-  Serie,
-  ['User', { model: Season, include: { model: Episode, include: Link } }],
-  [['Seasons', 'number', 'ASC']]
-);
+exports.oneSerie = getOne(Serie, [{ model: Season }], [['Seasons', 'number', 'ASC']]);
+exports.basic = getOne(Serie);

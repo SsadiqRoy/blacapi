@@ -9,6 +9,7 @@ const router = Router();
 //
 
 router.get('/', controller.allSeries);
+router.get('/basic/:id', controller.basic);
 router.get('/:id', controller.oneSerie);
 
 router.use(protect, aboveUser);

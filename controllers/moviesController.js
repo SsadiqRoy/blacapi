@@ -13,8 +13,8 @@ exports.deleteMovie = deleteOne(Movie);
 exports.getAll = getAll(Movie, [
   ['title', 0],
   ['country', 0],
+  ['keywords', 1],
   ['companies', 1],
   ['charactors', 1],
-  ['keywords', 1],
 ]);
-exports.getOne = getOne(Movie, ['User', 'Links'], [['Links', 'resolution', 'ASC']]);
+exports.getOne = getOne(Movie, ['Links'], [['Links', 'resolution', 'ASC']]);

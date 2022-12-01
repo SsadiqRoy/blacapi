@@ -4,37 +4,31 @@ const sequelize = require('../db');
 const User = require('./user');
 const Link = require('./links');
 
-const Movie = sequelize.define(
-  'Movie',
-  {
-    id: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      primaryKey: true,
-      unique: true,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    portrait: DataTypes.STRING(500),
-    landscape: DataTypes.STRING(500),
-    description: DataTypes.STRING(1000),
-    tags: DataTypes.JSON,
-    keywords: DataTypes.JSON,
-    company: DataTypes.STRING,
-    companies: DataTypes.JSON,
-    charactors: DataTypes.JSON,
-    actors: DataTypes.JSON,
-    directors: DataTypes.JSON,
-    releasedDate: DataTypes.DATEONLY,
-    country: DataTypes.STRING,
-    rating: DataTypes.STRING(4),
+const Movie = sequelize.define('Movie', {
+  id: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    primaryKey: true,
+    unique: true,
   },
-  {
-    // defaultScope: { attributes: { exclude: "UserId" } },
-  }
-);
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  portrait: DataTypes.STRING(500),
+  landscape: DataTypes.STRING(500),
+  description: DataTypes.STRING(1000),
+  tags: DataTypes.JSON,
+  keywords: DataTypes.JSON,
+  company: DataTypes.STRING,
+  companies: DataTypes.JSON,
+  charactors: DataTypes.JSON,
+  actors: DataTypes.JSON,
+  directors: DataTypes.JSON,
+  releasedDate: DataTypes.DATEONLY,
+  country: DataTypes.STRING,
+  rating: DataTypes.STRING(4),
+});
 
 // =========== association between user and movie =====
 User.hasMany(Movie, {
