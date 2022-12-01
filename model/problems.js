@@ -13,12 +13,8 @@ const Problem = sequelize.define('Problem', {
     unique: true,
   },
   by: DataTypes.STRING,
-  title: DataTypes.STRING,
+  on: DataTypes.STRING,
   message: DataTypes.STRING,
-  on: {
-    type: DataTypes.ENUM,
-    values: ['movie', 'game', 'serie', 'other'],
-  },
 });
 
 /*
