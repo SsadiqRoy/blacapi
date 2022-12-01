@@ -11,7 +11,6 @@ const AppError = require('../utils/appError');
  * prevents unlogged in users
  */
 exports.protect = catchAsync(async (req, res, next) => {
-  // console.log(req);
   if (req.user) return next();
   const cookie = req.cookies[process.env.login];
   if (!cookie) return next(new AppError('login to get access', 406));
@@ -21,9 +20,9 @@ exports.protect = catchAsync(async (req, res, next) => {
   const { exp, id, iat } = decode;
 
   // checking for active account
-  console.log({ exp, id, iat });
+
   const user = await User.findByPk(id);
-  // console.log(user);
+
   if (!user.active) return next(new AppError('your account is not active', 406));
 
   // checking for cookie expery
@@ -54,9 +53,8 @@ exports.loggedIn = catchAsync(async (req, res, next) => {
   const { exp, id, iat } = decode;
 
   // checking for active account
-  // console.log({ exp, id, iat });
   const user = await User.findByPk(id);
-  // console.log(user);
+
   if (!user.active) return next();
 
   // checking for cookie expery

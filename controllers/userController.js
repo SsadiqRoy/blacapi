@@ -4,15 +4,16 @@ const { promisify } = require('util');
 
 const User = require('../model/user');
 
-const { deleteOne, getAll, getOne, search, createInstance } = require('../middlewares/globalMiddleware');
+const { deleteOne, getAll, getOne, createInstance } = require('../middlewares/globalMiddleware');
 const { catchAsync } = require('../utils/utils');
+const AppError = require('../utils/appError');
 
 //
 
 exports.signup = catchAsync(async (req, res, next) => {
   const { email, name, password } = req.body;
   // checking for the requirments
-  if (!email || !name || !password) return next(new Error('email, name and password are all required'));
+  if (!email || !name || !password) return next(new AppError('email, name and password are all required', 406));
 
   // creating the user
   req.body = { name, email, password };
@@ -41,23 +42,23 @@ exports.signup = catchAsync(async (req, res, next) => {
 //
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password) return next(new Error('email and password is required'));
+  if (!email || !password) return next(new AppError('email and password is required', 406));
 
   const user = await User.findOne({
     where: { email },
     attributes: { include: 'password' },
   });
-  if (!user) return next(new Error('no user found'));
+  if (!user) return next(new AppError('no user found', 404));
 
   // validating password
   const validPass = await bcrypt.compare(password, user.password);
-  if (!validPass) return next(new Error('email or password is incorrect'));
+  if (!validPass) return next(new AppError('email or password is incorrect', 401));
 
   // creating login cookie
   const cookie = jwt.sign({ id: user.id }, process.env.loginToken, {
     expiresIn: process.env.loginExp,
   });
-  // console.log(process.env.loginExp / 1000000 / 60);
+
   const cookieOption = {
     expires: new Date(Date.now() + +process.env.loginExp),
     secure: true,
@@ -131,9 +132,8 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   const { exp, id, iat } = decode;
 
   // checking for active account
-  // console.log({ exp, id, iat });
   const user = await User.findByPk(id);
-  // console.log(user);
+
   if (!user.active)
     return res.status(200).json({
       status: 'success',
@@ -179,12 +179,12 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 exports.changePassword = catchAsync(async (req, res, next) => {
   const { oldPassword, password } = req.body;
 
-  if (!oldPassword || !password) return next(new Error('Old password or New password is not available'));
+  if (!oldPassword || !password) return next(new AppError('Old password or New password is not available', 406));
   const user = await User.findByPk(req.params.id, { attributes: { include: 'password' } });
-  // console.log(user.password);
+
   const valid = await bcrypt.compare(oldPassword, user.password);
 
-  if (!valid) return next(new Error('password is incorrect'));
+  if (!valid) return next(new AppError('password is incorrect', 406));
 
   const newUser = await User.update({ password, passwordChangedAt: Date.now() }, { where: { id: req.params.id } });
 

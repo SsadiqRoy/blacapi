@@ -13,8 +13,6 @@ let nOfInstance = 0;
  */
 exports.createInstance = async (Model, body) => {
   try {
-    // console.log('🔥', Model);
-    // console.log('🔥', body);
     // creating an id
     body.id = createId();
     // creating the data
