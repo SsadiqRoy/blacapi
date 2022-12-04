@@ -28,7 +28,7 @@ class ApiFilter {
   pagination() {
     const { page, limit } = this.oldq;
     const p = +page || 1;
-    const l = +limit || 10;
+    const l = +limit || 30;
     this.page = p;
     this.query.offset = p * l - l;
     this.query.limit = l;

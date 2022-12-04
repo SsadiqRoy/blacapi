@@ -1,5 +1,5 @@
-const { Op } = require("sequelize");
-const sequelize = require("../db");
+const { Op } = require('sequelize');
+const sequelize = require('../db');
 
 /**
  * builds search options on to be searched on each field(column) with the search text.
@@ -26,7 +26,7 @@ exports.searchMatch = (fields, text) => {
     } else {
       // desinging query for field JSON data type
       const op2 = sequelize.fn(
-        "JSON_CONTAINS",
+        'JSON_CONTAINS',
         sequelize.col(f),
         sequelize.literal(`'"${text}"'`),
         sequelize.literal("'$'")
