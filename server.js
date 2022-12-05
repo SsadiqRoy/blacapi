@@ -26,6 +26,7 @@ async function connectDB() {
     await sequelize.sync();
     // sequelize.sync({ alter: true });
     console.log('🎁🎁 blacapi db connected....');
+    new LogToFile('Database connection successful');
   } catch (error) {
     new WriteError(error, {}, 'DB_CONN');
 
@@ -38,7 +39,7 @@ connectDB();
 
 // running the app
 const app = require('./app');
-const { WriteError } = require('./errors/writeError');
+const { WriteError, LogToFile } = require('./errors/writeError');
 
 console.log('about to start app');
 // creating server for the app
