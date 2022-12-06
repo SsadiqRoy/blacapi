@@ -23,10 +23,10 @@ const sequelize = require('./db');
 async function connectDB() {
   try {
     await sequelize.authenticate();
-    await sequelize.sync();
-    // sequelize.sync({ alter: true });
+    // await sequelize.sync();
+    sequelize.sync({ alter: true });
     console.log('🎁🎁 blacapi db connected....');
-    new LogToFile('Database connection successful');
+    // new LogToFile('Database connection successful');
   } catch (error) {
     new WriteError(error, {}, 'DB_CONN');
 
