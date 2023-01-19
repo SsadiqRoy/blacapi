@@ -1,36 +1,41 @@
-const fs = require('fs');
+const fs = require("fs");
 // const { promisify } = require('util');
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 
-process.on('uncaughtException', async (error) => {
+process.on("uncaughtException", async (error) => {
   console.log(error);
   error.date = new Date().toISOString();
-  error.type = 'uncaughtException';
+  error.type = "uncaughtException";
 
-  fs.appendFile('./errors/error.log', `\n \n ${JSON.stringify(error)}`, 'utf-8', (e) => {
-    if (e) {
-      console.log(e);
+  fs.appendFile(
+    "./errors/error.log",
+    `\n \n ${JSON.stringify(error)}`,
+    "utf-8",
+    (e) => {
+      if (e) {
+        console.log(e);
+      }
     }
-  });
+  );
 
   process.exit(1);
 });
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: "./config.env" });
 
 // connecting to the database
-const sequelize = require('./db');
+const sequelize = require("./db");
 async function connectDB() {
   try {
     await sequelize.authenticate();
     // await sequelize.sync();
     sequelize.sync({ alter: true });
-    console.log('🎁🎁 blacapi db connected....');
+    console.log("🎁🎁 blacapi db connected....");
     // new LogToFile('Database connection successful');
   } catch (error) {
-    new WriteError(error, {}, 'DB_CONN');
+    new WriteError(error, {}, "DB_CONN");
 
-    console.log('DB_CONNECTION🔥', error);
+    console.log("DB_CONNECTION🔥", error);
   }
 }
 connectDB();
@@ -38,26 +43,26 @@ connectDB();
 //
 
 // running the app
-const app = require('./app');
-const { WriteError, LogToFile } = require('./errors/writeError');
+const app = require("./app");
+const { WriteError, LogToFile } = require("./errors/writeError");
 
-console.log('about to start app');
+console.log("about to start app");
 // creating server for the app
 const server = app.listen(process.env.port, process.env.host, async (error) => {
   if (error) {
-    new WriteError(error, {}, 'CREATING_SERVER');
+    new WriteError(error, {}, "CREATING_SERVER");
   }
-  console.log('blacapi server started...');
+  console.log("blacapi server started...");
 });
 
 //
 
 //
 
-process.on('unhandledRejection', (error) => {
+process.on("unhandledRejection", (error) => {
   console.log(error);
   server.close(async () => {
-    new WriteError(error, {}, 'unhandledRejection');
+    new WriteError(error, {}, "unhandledRejection");
 
     process.exit(1);
   });
