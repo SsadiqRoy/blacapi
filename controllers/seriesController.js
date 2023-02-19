@@ -14,8 +14,8 @@ exports.allSeries = getAll(Serie, [
   ["country", 0],
   ["keywords", 1],
   ["companies", 1],
-  ["actors", 1],
-  ["directors", 1],
+  ["charactors", 1],
+  // ["directors", 1],
 ]);
 exports.oneSerie = getOne(Serie, [{ model: Season }], [["Seasons", "number", "ASC"]]);
 exports.basic = getOne(Serie);

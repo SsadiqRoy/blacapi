@@ -1,4 +1,4 @@
-const { catchAsync } = require('../utils/utils');
+const { catchAsync } = require("../utils/utils");
 
 exports.beforeCreate = catchAsync(async (req, res, next) => {
   const { company, country, companies, keywords } = req.body;
@@ -8,9 +8,9 @@ exports.beforeCreate = catchAsync(async (req, res, next) => {
   if (company) req.body.company = req.body.company.toLowerCase();
   if (country) req.body.country = req.body.country.toLowerCase();
 
-  if (companies) req.body.companies = companies.map((tag) => tag.toLowerCase());
-  if (charactors) req.body.charactors = charactors.map((tag) => tag.toLowerCase());
-  if (keywords) req.body.keywords = keywords.map((tag) => tag.toLowerCase());
+  if (companies) req.body.companies = companies.map((tag) => tag.toLowerCase().replaceAll(" ", "-"));
+  if (charactors) req.body.charactors = charactors.map((tag) => tag.toLowerCase().replaceAll(" ", "-"));
+  if (keywords) req.body.keywords = keywords.map((tag) => tag.toLowerCase().replaceAll(" ", "-"));
 
   next();
 });
